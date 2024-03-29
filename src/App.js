@@ -21,6 +21,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+  const [showJobBoard, setJobBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
@@ -30,6 +31,7 @@ const App = () => {
     if (user) {
       setCurrentUser(user);
       setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
+      setJobBoard(user.roles.includes("ROLE_MODERATOR"));
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
     }
 
@@ -45,6 +47,7 @@ const App = () => {
   const logOut = () => {
     AuthService.logout();
     setShowModeratorBoard(false);
+    setJobBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);
   };
@@ -52,14 +55,14 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+      <nav className="navbar navbar-expand navbar-dark" style={{ backgroundColor: 'rgb(170, 120, 26)'}}>
           <Link to={"/"} className="navbar-brand">
             Fetch a Friend
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
+              <Link to={"/home"} className="nav-link"><img src="Bonehome.jpg" alt="link" style={{width: "80px"}}/>
+                
               </Link>
             </li>
 
@@ -67,6 +70,14 @@ const App = () => {
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
                   Moderator Board
+                </Link>
+              </li>
+            )}
+
+            {showJobBoard && (
+              <li className="nav-item">
+                <Link to={"/jobs"} className="nav-link">
+                   Jobs
                 </Link>
               </li>
             )}
@@ -104,14 +115,14 @@ const App = () => {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
+                <Link to={"/login"} className="nav-link"><img src="Login.jpg" alt="link" style={{width: "80px"}}/>
+                
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
+                <Link to={"/register"} className="nav-link"><img src="Signup.jpg" alt="link" style={{width: "80px"}}/>
+                  
                 </Link>
               </li>
             </div>

@@ -7,12 +7,16 @@ const getPublicContent = () => {
   return axios.get(API_URL + "all");
 };
 
-const getUserBoard = () => { 
+const getUserBoard = () => {
   return axios.get(API_URL + "user", { headers: authHeader() });
 };
 
 const getModeratorBoard = () => {
   return axios.get(API_URL + "mod", { headers: authHeader() });
+};
+
+const getJobBoard = () => {
+  return axios.get(API_URL + "jobs", { headers: authHeader() });
 };
 
 const getAdminBoard = () => {
@@ -24,6 +28,7 @@ const UserService = {
   getUserBoard,
   getModeratorBoard,
   getAdminBoard,
+  getJobBoard
 };
 
 export default UserService;
