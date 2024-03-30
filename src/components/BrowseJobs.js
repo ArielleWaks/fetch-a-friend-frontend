@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Card, CardContent, CardHeader, Container, Grid, IconButton, Typography } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Container, Typography } from '@mui/material';
+import JobCard from "./JobCard";
 
 import EventBus from "../common/EventBus";
 
@@ -36,29 +36,8 @@ export default function BrowseJobs () {
     fetchData();
   }, []);
   
-  const handleDelete = (id, _e) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    try {
-      fetch(API_URL + '/jobs/' + id, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': 'Bearer ' + user.accessToken,
-          'Content-Type': 'application/json'
-        }
-      });
-      setJobArray(jobArray.filter((job) => (job.id !== id)));
-    } catch (error) {
-      const errorMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      console.log(errorMessage);
-      if (error.response && error.response.status === 401) {
-        EventBus.dispatch("logout");
-      }
-    }
+  const deleteCallback = (id) => {
+    setJobArray(jobArray.filter((job) => (job.id !== id)));
   }
   
   return (
@@ -68,36 +47,7 @@ export default function BrowseJobs () {
       </Typography>
       {jobArray.map((field, id) => {
         return (
-          <Card variant="outlined" key={id}>
-            <CardHeader
-              avatar={
-                <Avatar src="favavatar.jpeg"/>
-              }
-              title={field.description}
-              subheader={field.startDate + " to " + field.endDate}
-              action={
-                <IconButton onClick={(e) => handleDelete(field.id, e)}>
-                  <DeleteIcon/>
-                </IconButton>
-              }
-            />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Typography variant="body2">{"Start Date: " + field.startDate}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body2">{"End Date: " + field.endDate}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body2">{"Pay Rate: $" + field.payRate}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body2">{"Hours: " + field.totalHours}</Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} key={id} />
         )
       })}
     </Container>
