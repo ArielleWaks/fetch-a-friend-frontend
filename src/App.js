@@ -15,6 +15,7 @@ import BoardAdmin from "./components/BoardAdmin";
 
 import EventBus from "./common/EventBus";
 import CreateJob from "./components/CreateJob";
+import UpdateJob from "./components/UpdateJob";
 import BrowseJobs from "./components/BrowseJobs";
 import MyJobs from "./components/MyJobs";
 
@@ -142,6 +143,7 @@ const App = () => {
             <Route path="/mod" element={<BoardModerator/>} />
             <Route path="/admin" element={<BoardAdmin/>} />
             <Route path="/jobs/add" element={<CreateJob/>} />
+            <Route path="/jobs/edit/:id" element={<UpdateJob/>} />
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
           </Routes>

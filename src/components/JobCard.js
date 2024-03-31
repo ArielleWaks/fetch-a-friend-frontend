@@ -4,7 +4,7 @@ import React from "react";
 import EventBus from "../common/EventBus";
 
 
-export default function JobCard ({ jobObject, id, deleteCallback }) {
+export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled }) {
   
   const API_URL = "http://localhost:3000/api";
   
@@ -41,7 +41,7 @@ export default function JobCard ({ jobObject, id, deleteCallback }) {
         }
         title={jobObject.description}
         subheader={jobObject.startDate + " to " + jobObject.endDate}
-        action={
+        action={ deleteEnabled &&
           <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
             <DeleteIcon/>
           </IconButton>

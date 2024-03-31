@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Container, Typography } from '@mui/material';
 import JobCard from "./JobCard";
 
-import EventBus from "../common/EventBus";
+import {useNavigate} from "react-router-dom";
 
 const API_URL = "http://localhost:3000/api";
 
-export default function BrowseJobs () {
+export default function MyJobs () {
   const [jobArray, setJobArray] = useState([]);
+  const navigate = useNavigate();
   
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user === null) {
+      navigate('/login');
+    }
     async function fetchData() {
       const user = JSON.parse(localStorage.getItem('user'));
       try {
@@ -22,21 +27,12 @@ export default function BrowseJobs () {
         const json = await response.json()
         setJobArray(json);
       } catch (error) {
-        const errorMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        console.log(errorMessage);
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
+        console.log(error);
       }
     }
     
     fetchData();
-  }, []);
+  }, [navigate]);
   
   const deleteCallback = (id) => {
     setJobArray(jobArray.filter((job) => (job.id !== id)));
@@ -49,7 +45,7 @@ export default function BrowseJobs () {
       </Typography>
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} key={id} />
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} key={id} />
         )
       })}
     </Container>

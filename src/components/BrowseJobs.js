@@ -47,7 +47,7 @@ export default function BrowseJobs () {
       </Typography>
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} key={id} />
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} key={id} />
         )
       })}
     </Container>
