@@ -16,6 +16,7 @@ import BoardAdmin from "./components/BoardAdmin";
 import EventBus from "./common/EventBus";
 import CreateJob from "./components/CreateJob";
 import BrowseJobs from "./components/BrowseJobs";
+import MyJobs from "./components/MyJobs";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -62,7 +63,7 @@ const App = () => {
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/home"} className="nav-link"><img src="Bonehome.jpg" alt="link" style={{width: "80px"}}/>
+              <Link to={"/home"} className="nav-link"><img src="/Bonehome.jpg" alt="link" style={{width: "80px"}}/>
                 
               </Link>
             </li>
@@ -116,13 +117,13 @@ const App = () => {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-link"><img src="Login.jpg" alt="link" style={{width: "80px"}}/>
+                <Link to={"/login"} className="nav-link"><img src="/Login.jpg" alt="link" style={{width: "80px"}}/>
                 
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link to={"/register"} className="nav-link"><img src="Signup.jpg" alt="link" style={{width: "80px"}}/>
+                <Link to={"/register"} className="nav-link"><img src="/Signup.jpg" alt="link" style={{width: "80px"}}/>
                   
                 </Link>
               </li>
@@ -141,6 +142,7 @@ const App = () => {
             <Route path="/mod" element={<BoardModerator/>} />
             <Route path="/admin" element={<BoardAdmin/>} />
             <Route path="/jobs/add" element={<CreateJob/>} />
+            <Route path="/jobs/myjobs" element={<MyJobs/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
           </Routes>
         </div>

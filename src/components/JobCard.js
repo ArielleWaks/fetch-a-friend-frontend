@@ -37,7 +37,7 @@ export default function JobCard ({ jobObject, id, deleteCallback }) {
     <Card variant="outlined" >
       <CardHeader
         avatar={
-          <Avatar src="favavatar.jpeg"/>
+          <Avatar src="/favavatar.jpeg"/>
         }
         title={jobObject.description}
         subheader={jobObject.startDate + " to " + jobObject.endDate}
