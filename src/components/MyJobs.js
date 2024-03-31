@@ -45,7 +45,7 @@ export default function MyJobs () {
       </Typography>
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} key={id} />
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} editEnabled={true} key={id} />
         )
       })}
     </Container>

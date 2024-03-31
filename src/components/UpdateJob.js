@@ -107,7 +107,7 @@ export default function UpdateJob() {
     <div className="container">
       <Container maxWidth="md">
         <header className="jumbotron">
-          <h3>Update Job Posting</h3>
+          <h3>Edit Job Posting</h3>
         </header>
       </Container>
       <Container maxWidth="md">
@@ -130,7 +130,6 @@ export default function UpdateJob() {
                     zipCodeError: !regExZip.test(zipcode)
                   });
                   setFormData({...formData, zipCode: zipcode});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -183,7 +182,6 @@ export default function UpdateJob() {
                     payRateError: isNaN(Number(pay)) || pay <= 0
                   });
                   setFormData({...formData, payRate: pay});
-                  // setEmptyFields(false);
                 }}
                 required
               />
