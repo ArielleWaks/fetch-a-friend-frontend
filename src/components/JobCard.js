@@ -78,10 +78,20 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
           <Grid item xs={6}>
             <Typography variant="body2">{"Hours: " + jobObject.totalHours}</Typography>
           </Grid>
+          { editEnabled &&
+            <Grid item xs={6}>
+              <Typography variant="body2">{"Job Status:" + jobObject.jobStatus.replace("STATUS_", " ")}</Typography>
+            </Grid>
+          }
+          { Object.is(jobObject.jobStatus, "STATUS_CLAIMED") && editEnabled &&
+            <Grid item xs={6}>
+              <Typography variant="body2">{"Pet Sitter: " + jobObject.sitter.username }</Typography>
+            </Grid>
+          }
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        { editEnabled &&
+        { editEnabled && Object.is(jobObject.jobStatus, "STATUS_OPEN") &&
           <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
             Edit
           </Button>
