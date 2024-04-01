@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography } from '@mui/material';
+import { Container, Typography, Autocomplete, TextField} from '@mui/material';
 import JobCard from "./JobCard";
 
 import EventBus from "../common/EventBus";
@@ -39,15 +39,21 @@ export default function BrowseJobs () {
   const deleteCallback = (id) => {
     setJobArray(jobArray.filter((job) => (job.id !== id)));
   }
+
+  const descriptions = [];
+
+  for (let i = 0; i < jobArray.length; i++){
+    descriptions.push({label: jobArray[i].description});
+  }
   
   return (
     <Container>
       <Typography varient="h1">
-        Browse Open Jobs
+        Search jobs by...
       </Typography>
 
-      <Autocomplete disablePortal id="combo-box-demo" options={top100Films} sx={{ width: 300 }} 
-      renderInput={(params) => <TextField {...params} label="Movie" />}/>
+      <Autocomplete disablePortal id="combo-box-demo" options={descriptions} sx={{ width: 300 }} 
+      renderInput={(params) => <TextField {...params} label="Animal" />}/>
 
 
       {jobArray.map((field, id) => {
