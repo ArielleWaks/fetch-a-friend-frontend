@@ -40,7 +40,7 @@ export default function MyJobsSitting () {
   
   return (
     <Container>
-      <Typography varient="h1">
+      <Typography variant="h3">
         My Pet Sitting
       </Typography>
       {jobArray.map((field, id) => {

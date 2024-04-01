@@ -40,7 +40,7 @@ export default function MyJobs () {
   
   return (
     <Container>
-      <Typography varient="h1">
+      <Typography variant="h3">
         My Jobs
       </Typography>
       {jobArray.map((field, id) => {
