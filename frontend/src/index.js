@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import TestApp from './components/TestMapComponent';
 
 import NavBar from './components/NavBarComponent.js';
+import { MarkerWithInfowindow } from './components/InfoWindowComponent.js';
 
 
 
@@ -17,6 +18,7 @@ root.render(
     <NavBar/>
     <App />      
     <TestApp/>
+    <MarkerWithInfowindow/>
     
     
    

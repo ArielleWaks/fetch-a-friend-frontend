@@ -5,6 +5,8 @@ import { Button, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Marker ,GoogleMap,LoadScript} from '@react-google-maps/api';
+import {APIProvider, AdvancedMarker,InfoWindow,Map} from '@vis.gl/react-google-maps'
+import { MarkerWithInfowindow } from './InfoWindowComponent';
 
 function TestApp() {
   const [zipCode, setZipCode] = useState('');
@@ -22,12 +24,13 @@ function TestApp() {
       console.error('Error fetching job markers:', error);
     }
   };
-
+  
   const getCoordinates = async (addresses) => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAP_API
     const coordinates = [];
     // const testAddress = '533 Sarah ln,Saint Louis,MO 63141'
     console.log(coordinates);
+    
     for (const address of addresses) {
       try {
         const response = await axios.get(
@@ -44,7 +47,7 @@ function TestApp() {
         console.error('Error geocoding address:', error);
       }
     }
-
+   
     return coordinates;
   };
 
@@ -75,15 +78,19 @@ function TestApp() {
             center={{ lat:38.621639, lng:-90.364988 }} // Initial center of the map
             zoom={10} // Initial zoom level
             mapContainerStyle={{ height: '100%', width: '100%' }}
-          >
+            >
+                          
             {markers.map((marker, index) => (
               <Marker
                 key={index}
                 position={{ lat: marker.lat, lng: marker.lng }}
-
-              />
+                
+              /> 
+              
             ))}
+            
           </GoogleMap>
+          
         </LoadScript>
       </div>
     </div>
