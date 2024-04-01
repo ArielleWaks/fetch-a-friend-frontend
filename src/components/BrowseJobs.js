@@ -45,6 +45,11 @@ export default function BrowseJobs () {
       <Typography varient="h1">
         Browse Open Jobs
       </Typography>
+
+      <Autocomplete disablePortal id="combo-box-demo" options={top100Films} sx={{ width: 300 }} 
+      renderInput={(params) => <TextField {...params} label="Movie" />}/>
+
+
       {jobArray.map((field, id) => {
         return (
           <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} editEnabled={false} key={id} />
