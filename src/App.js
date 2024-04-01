@@ -18,6 +18,7 @@ import CreateJob from "./components/CreateJob";
 import UpdateJob from "./components/UpdateJob";
 import BrowseJobs from "./components/BrowseJobs";
 import MyJobs from "./components/MyJobs";
+import MyJobsSitting from "./components/MyJobsSitting";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -145,6 +146,7 @@ const App = () => {
             <Route path="/jobs/add" element={<CreateJob/>} />
             <Route path="/jobs/edit/:id" element={<UpdateJob/>} />
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
+            <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
           </Routes>
         </div>
