@@ -5,9 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import TestApp from './components/TestMapComponent';
+// import TestApp from './components/TestInfoWindowComponent.js';
 
 import NavBar from './components/NavBarComponent.js';
-import { MarkerWithInfowindow } from './components/InfoWindowComponent.js';
+// import { MarkerWithInfowindow } from './components/InfoWindowComponent.js';
 
 
 
@@ -18,7 +19,7 @@ root.render(
     <NavBar/>
     <App />      
     <TestApp/>
-    <MarkerWithInfowindow/>
+    {/* <MarkerWithInfowindow/> */}
     
     
    

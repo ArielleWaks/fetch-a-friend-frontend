@@ -4,21 +4,36 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { Button, Form } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Marker ,GoogleMap,LoadScript} from '@react-google-maps/api';
-import {APIProvider, AdvancedMarker,InfoWindow,Map} from '@vis.gl/react-google-maps'
-import { MarkerWithInfowindow } from './InfoWindowComponent';
+import { Marker, GoogleMap, LoadScript, InfoWindow } from '@react-google-maps/api';
+import MarkerNames from './MarkerNames';
 
 function TestApp() {
   const [zipCode, setZipCode] = useState('');
-  const [markers, setMarkers] = useState([]);
+  // const [markers, setMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  // const [addresses,setAddresses] = useState([])
+  const [markersData,setMarkersData]=useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.get(`/clients/search?zipCode=${zipCode}`);
+      const jobs = response.data;
+
       const jobAddresses = response.data.map(job => job.address);
       const jobCoordinates = await getCoordinates(jobAddresses);
-      setMarkers(jobCoordinates);
+      // setMarkers(jobCoordinates);
+      //fetching names with each job
+      const jobNames = await Promise.all(jobs.map(job => axios.get(`/clients/${job.id}`)));
+
+      //combine coordinates and names
+      const markersData = jobCoordinates.map((coordinate,index)=> ({
+        ...coordinate,
+        name: jobNames[index].data.name,
+        address: jobAddresses[index] // Associate each marker with its address
+      }));
+      setMarkersData(markersData);
+      // console.log(selectedMarker)
       
     } catch (error) {
       console.error('Error fetching job markers:', error);
@@ -28,8 +43,8 @@ function TestApp() {
   const getCoordinates = async (addresses) => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAP_API
     const coordinates = [];
-    // const testAddress = '533 Sarah ln,Saint Louis,MO 63141'
-    console.log(coordinates);
+    const actualAdresses =[];
+    console.log(actualAdresses);
     
     for (const address of addresses) {
       try {
@@ -37,17 +52,17 @@ function TestApp() {
           `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
         );
         const { results } = response.data;
-        console.log(response.data)
+          actualAdresses.push(results[0].formatted_address);
         if (results && results.length > 0) {
           const { lat, lng } = results[0].geometry.location;
           coordinates.push({ lat, lng });
         }
-
       } catch (error) {
         console.error('Error geocoding address:', error);
       }
     }
-   
+    //storing adresses in state
+    // setAddresses(actualAdresses) 
     return coordinates;
   };
 
@@ -55,22 +70,22 @@ function TestApp() {
     <div>
       <Form inline onSubmit={handleSubmit}>
         <Row>
-          <Col xs ="auto">
-        <Form.Control
-        type="text"
-        value={zipCode}
-        onChange={(e) => setZipCode(e.target.value)}
-        placeholder="Enter ZIP code"
-        className="mr-sm-2"
-        />    
-        </Col>
-        <Col xs="auto">
-        <Button type="submit" variant="outline-secondary">Search</Button>
-        </Col>
+          <Col xs="auto">
+            <Form.Control
+              type="text"
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+              placeholder="Enter ZIP code"
+              className="mr-sm-2"
+            />    
+          </Col>
+          <Col xs="auto">
+            <Button type="submit" variant="outline-secondary">Search</Button>
+          </Col>
         </Row>
       </Form>
       
-         <div style={{ height: '50vh', width: '50vw'}}>
+      <div style={{ height: '50vh', width: '50vw'}}>
         <LoadScript
           googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API}
         >
@@ -78,21 +93,29 @@ function TestApp() {
             center={{ lat:38.621639, lng:-90.364988 }} // Initial center of the map
             zoom={10} // Initial zoom level
             mapContainerStyle={{ height: '100%', width: '100%' }}
-            >
-                          
-            {markers.map((marker, index) => (
+          >
+            {markersData.map((marker, index) => (
               <Marker
                 key={index}
                 position={{ lat: marker.lat, lng: marker.lng }}
-                
-              /> 
-              
+                onClick={() => setSelectedMarker(marker)}
+              />
             ))}
-            
+            {selectedMarker && (
+              <InfoWindow
+                position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+                onCloseClick={() => setSelectedMarker(null)}
+              >
+                <div>
+                <h3>{selectedMarker.name}</h3>
+                <p>Address: {selectedMarker.address}</p>
+                </div>
+              </InfoWindow>
+            )}
           </GoogleMap>
-          
         </LoadScript>
       </div>
+      <MarkerNames markers={markersData}/> 
     </div>
   );
 }
