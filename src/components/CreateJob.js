@@ -100,7 +100,6 @@ export default function CreateJob() {
                     zipCodeError: !regExZip.test(zipcode)
                   });
                   setFormData({...formData, zipCode: zipcode});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -132,7 +131,6 @@ export default function CreateJob() {
                     totalHoursError: isNaN(Number(hours)) || hours <= 0
                   });
                   setFormData({...formData, totalHours: hours});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -153,7 +151,6 @@ export default function CreateJob() {
                     payRateError: isNaN(Number(pay)) || pay <= 0
                   });
                   setFormData({...formData, payRate: pay});
-                  // setEmptyFields(false);
                 }}
                 required
               />

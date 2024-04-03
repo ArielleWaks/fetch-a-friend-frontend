@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography } from '@mui/material';
+import {Box, Container, Tooltip, Typography} from '@mui/material';
 import JobCard from "./JobCard";
 
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const API_URL = "http://localhost:3000/api";
 
@@ -43,6 +43,15 @@ export default function MyJobsSitting () {
       <Typography variant="h3">
         My Pet Sitting
       </Typography>
+      {jobArray.length === 0 &&
+        <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
+          <Typography variant="subtitle1" >
+            To become a pet sitter, check out
+            <Tooltip title="Browse Open Jobs"><Link to="../jobs"> open jobs </Link></Tooltip>
+              in your area!
+          </Typography>
+        </Box>
+      }
       {jobArray.map((field, id) => {
         return (
           <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} editEnabled={false} acceptEnabled={false} key={id} />

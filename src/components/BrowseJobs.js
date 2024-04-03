@@ -49,7 +49,7 @@ export default function BrowseJobs () {
       <Typography variant="h3" gutterBottom>
         Browse Pet Sitting Jobs
       </Typography>
-      {(Object.is(user, null)) &&
+      {user === null &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
           <Typography variant="subtitle1" >
             <Link to="../login">Login </Link>
@@ -66,7 +66,7 @@ export default function BrowseJobs () {
                    deleteCallback={deleteCallback}
                    deleteEnabled={false}
                    editEnabled={false}
-                   acceptEnabled={Object.is(user, null) ? false : true}
+                   acceptEnabled={user !== null}
                    key={id}
           />
         )

@@ -1,4 +1,4 @@
-import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled }) {
   
   const API_URL = "http://localhost:3000/api";
-  
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
   
   const handleAcceptJob = (id, _e) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    try {
+     try {
       const response = fetch(API_URL + '/jobs/sitter/' + id, {
         method: 'PUT',
         headers: {
@@ -31,7 +30,6 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   }
   
   const handleDelete = (id, _e) => {
-    const user = JSON.parse(localStorage.getItem('user'));
     try {
       const response = fetch(API_URL + '/jobs/' + id, {
         method: 'DELETE',
@@ -58,10 +56,12 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
         }
         title={jobObject.description}
         subheader={jobObject.zipCode}
-        action={ deleteEnabled &&
-          <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
-            <DeleteIcon/>
-          </IconButton>
+        action={ deleteEnabled && user &&
+          <Tooltip title="Delete">
+            <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
+              <DeleteIcon/>
+            </IconButton>
+          </Tooltip>
         }
       />
       <CardContent>
@@ -78,12 +78,14 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
           <Grid item xs={6}>
             <Typography variant="body2">{"Hours: " + jobObject.totalHours}</Typography>
           </Grid>
-          { editEnabled &&
+          { editEnabled && user &&
             <Grid item xs={6}>
               <Typography variant="body2">{"Job Status:" + jobObject.jobStatus.replace("STATUS_", " ")}</Typography>
             </Grid>
           }
-          { Object.is(jobObject.jobStatus, "STATUS_CLAIMED") && editEnabled &&
+          { jobObject.jobStatus === "STATUS_CLAIMED" &&
+            editEnabled &&
+            user &&
             <Grid item xs={6}>
               <Typography variant="body2">{"Pet Sitter: " + jobObject.sitter.username }</Typography>
             </Grid>
@@ -91,15 +93,25 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        { editEnabled && Object.is(jobObject.jobStatus, "STATUS_OPEN") &&
-          <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
-            Edit
-          </Button>
+        { editEnabled &&
+          jobObject.jobStatus === "STATUS_OPEN" &&
+          <Tooltip title="Edit">
+            <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
+              Edit
+            </Button>
+          </Tooltip>
         }
-        { acceptEnabled &&
-          <Button size="small" variant="contained" onClick={(e) => handleAcceptJob(jobObject.id, e)} >
-            Accept Job
-          </Button>
+        { acceptEnabled && user &&
+          <Tooltip title={user.id === jobObject.user.id ? "You can't accept your own job" : "Accept Job"}>
+            <span>
+              <Button
+                size="small" variant="contained"
+                disabled={user.id === jobObject.user.id}
+                onClick={(e) => handleAcceptJob(jobObject.id, e)} >
+              Accept Job
+            </Button>
+            </span>
+          </Tooltip>
         }
       </CardActions>
     </Card>
