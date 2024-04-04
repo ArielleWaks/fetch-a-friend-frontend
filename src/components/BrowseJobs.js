@@ -12,7 +12,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const API_URL = "http://localhost:3000/api";
 
 export default function BrowseJobs () {
+  const [jobData, setJobData] = useState([]);
   const [jobArray, setJobArray] = useState([]);
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
   
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +26,7 @@ export default function BrowseJobs () {
         });
         const json = await response.json()
         setJobArray(json);
+        setJobData(json);
       } catch (error) {
         const errorMessage =
           (error.response &&
@@ -50,8 +53,21 @@ export default function BrowseJobs () {
   for (let i = 0; i < jobArray.length; i++){
     descriptions.push({label: jobArray[i].description});}
 
-  const handleClick = function(){
-    alert("Clicked!");
+    
+  const handleAnimalChange = function(event, value){
+    setSelectedAnimals(value);
+    console.log(value);
+  }
+
+  const processSearch = function(event){
+    let tempJobArray = [];
+    console.log(selectedAnimals);
+    for (let i = 0; i < selectedAnimals.length; i++){
+      const selectedLabel = selectedAnimals[i].label;
+      const filteredJobs = jobData.filter(job => job.description === selectedLabel);
+      tempJobArray.push(...filteredJobs);
+    }
+    setJobArray(tempJobArray);
   }
   
   return (
@@ -61,7 +77,8 @@ export default function BrowseJobs () {
       </Typography>
 
       
-    <Autocomplete multiple id="checkboxes-tags-demo" options={descriptions} disableCloseOnSelect
+    <Autocomplete multiple id="animals" options={descriptions} disableCloseOnSelect
+      onChange={handleAnimalChange} value={selectedAnimals}
       getOptionLabel={(option) => option.label} renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -75,9 +92,10 @@ export default function BrowseJobs () {
       )}
       style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField {...params} label="Search By Animal(s)" />
+        <TextField {...params} label="Search By Animal(s)"/>
       )}/>
-      <Button variant="contained" onClick={handleClick}>Search</Button>
+      <Button variant="contained" onClick={processSearch}>Search</Button>
+
 
 
       {jobArray.map((field, id) => {
