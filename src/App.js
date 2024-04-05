@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
-import BoardModerator from "./components/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin";
+import BoardModerator from "./components/BoardModerator";
+import BoardUser from "./components/BoardUser";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import Register from "./components/Register";
 
 import EventBus from "./common/EventBus";
-import CreateJob from "./components/CreateJob";
-import UpdateJob from "./components/UpdateJob";
 import BrowseJobs from "./components/BrowseJobs";
+import CreateJob from "./components/CreateJob";
 import MyJobs from "./components/MyJobs";
 import MyJobsSitting from "./components/MyJobsSitting";
+import UpdateJob from "./components/UpdateJob";
 
-import MyImages from './components/MyImages';
-import UploadImage from './components/UploadImage';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -94,13 +92,7 @@ const App = () => {
             )}
 
             
-            {showImageBoard && (
-              <li className="nav-item">
-                <Link to={"/jobs"} className="nav-link">
-                   Jobs
-                </Link>
-              </li>
-            )}
+
 
             {showAdminBoard && (
               <li className="nav-item">
