@@ -78,6 +78,12 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
           <Grid item xs={6}>
             <Typography variant="body2">{"Hours: " + jobObject.totalHours}</Typography>
           </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2">{"Pet Species: " + jobObject.petType}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2">{"Number of Pets: " + jobObject.petNumber}</Typography>
+          </Grid>
           { editEnabled && user &&
             <Grid item xs={6}>
               <Typography variant="body2">{"Job Status:" + jobObject.jobStatus.replace("STATUS_", " ")}</Typography>
