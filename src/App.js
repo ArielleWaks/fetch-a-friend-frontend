@@ -20,6 +20,9 @@ import BrowseJobs from "./components/BrowseJobs";
 import MyJobs from "./components/MyJobs";
 import MyJobsSitting from "./components/MyJobsSitting";
 
+import MyImages from './components/MyImages';
+import UploadImage from './components/UploadImage';
+
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
@@ -27,6 +30,7 @@ const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showJobBoard, setJobBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
+  const [showImageBoard, setShowImageBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
   useEffect(() => {
@@ -37,6 +41,7 @@ const App = () => {
       setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
       setJobBoard(user.roles.includes("ROLE_MODERATOR"));
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+      setShowImageBoard(user.roles.includes("ROLE_ADMIN"));
     }
 
     EventBus.on("logout", () => {
@@ -51,6 +56,7 @@ const App = () => {
   const logOut = () => {
     AuthService.logout();
     setShowModeratorBoard(false);
+    setShowImageBoard(false);
     setJobBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);
@@ -59,17 +65,18 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-      <nav className="navbar navbar-expand navbar-dark" style={{ backgroundColor: 'rgb(170, 120, 26)'}}>
+      <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
             Fetch a Friend
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/home"} className="nav-link"><img src="/Bonehome.jpg" alt="link" style={{width: "80px"}}/>
-                
+              <Link to={"/home"} className="nav-link">
+                Home
               </Link>
             </li>
-
+          
+                           
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -86,6 +93,15 @@ const App = () => {
               </li>
             )}
 
+            
+            {showImageBoard && (
+              <li className="nav-item">
+                <Link to={"/jobs"} className="nav-link">
+                   Jobs
+                </Link>
+              </li>
+            )}
+
             {showAdminBoard && (
               <li className="nav-item">
                 <Link to={"/admin"} className="nav-link">
@@ -94,13 +110,6 @@ const App = () => {
               </li>
             )}
 
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
           </div>
 
           {currentUser ? (
@@ -119,14 +128,14 @@ const App = () => {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-link"><img src="/Login.jpg" alt="link" style={{width: "80px"}}/>
-                
+                <Link to={"/login"} className="nav-link">
+                Login
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link to={"/register"} className="nav-link"><img src="/Signup.jpg" alt="link" style={{width: "80px"}}/>
-                  
+                <Link to={"/register"} className="nav-link">
+                  Sign Up
                 </Link>
               </li>
             </div>
