@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Autocomplete, TextField, Checkbox, Button} from '@mui/material';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
+OutlinedInput, ListItemText} from '@mui/material';
 import JobCard from "./JobCard";
 
 import EventBus from "../common/EventBus";
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const API_URL = "http://localhost:3000/api";
 
@@ -50,20 +46,20 @@ export default function BrowseJobs () {
 
   const descriptions = [];
 
-  for (let i = 0; i < jobArray.length; i++){
-    descriptions.push({label: jobArray[i].description});}
+  for (let i = 0; i < jobData.length; i++){
+    if ((!descriptions.includes(jobData[i].description))){
+    descriptions.push(jobData[i].description);}}
 
-    
-  const handleAnimalChange = function(event, value){
+  const handleAnimalChange = (event) => {
+    const { value } = event.target;
     setSelectedAnimals(value);
-    console.log(value);
-  }
+  };
 
   const processSearch = function(event){
     let tempJobArray = [];
     console.log(selectedAnimals);
     for (let i = 0; i < selectedAnimals.length; i++){
-      const selectedLabel = selectedAnimals[i].label;
+      const selectedLabel = selectedAnimals[i];
       const filteredJobs = jobData.filter(job => job.description === selectedLabel);
       tempJobArray.push(...filteredJobs);
     }
@@ -76,27 +72,27 @@ export default function BrowseJobs () {
         Search jobs by...
       </Typography>
 
-      
-    <Autocomplete multiple id="animals" options={descriptions} disableCloseOnSelect
-      onChange={handleAnimalChange} value={selectedAnimals}
-      getOptionLabel={(option) => option.label} renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.label}
-        </li>
-      )}
-      style={{ width: 500 }}
-      renderInput={(params) => (
-        <TextField {...params} label="Search By Animal(s)"/>
-      )}/>
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-checkbox-label">Animal</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={selectedAnimals}
+          onChange={handleAnimalChange}
+          input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {descriptions.map((animal) => (
+            <MenuItem key={animal} value={animal}>
+              <Checkbox checked={selectedAnimals.includes(animal)} />
+              <ListItemText primary={animal} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <Button variant="contained" onClick={processSearch}>Search</Button>
-
-
 
       {jobArray.map((field, id) => {
         return (
