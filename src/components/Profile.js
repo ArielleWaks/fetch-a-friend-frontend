@@ -1,24 +1,25 @@
+import { Button, TextField, Typography } from '@mui/material';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 import React, { useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
-import { Container, Typography } from '@mui/material';
 import FileService from '../services/FileService';
+import AuthService from "../services/auth.service";
+import { Grid, Card, CardMedia } from '@mui/material';
+
 
 import {
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-  MDBCard,
-  MDBCardText,
-  MDBCardBody,
-  MDBCardImage,
-  MDBBtn,
   MDBBreadcrumb,
   MDBBreadcrumbItem,
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBCardText,
+  MDBCol,
+  MDBContainer,
   MDBProgress,
   MDBProgressBar,
-  MDBIcon,
-  MDBListGroup,
-  MDBListGroupItem
+  MDBRow
 } from 'mdb-react-ui-kit';
 
 
@@ -28,6 +29,7 @@ const Profile = () => {
   const [files, setFiles] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(null);
   const [uploaderName, setUploaderName] = useState('');
+  const [description, setDescription] = useState(''); // Step 1: Add description state
   const [imageList, setImageList] = useState([]);
 
   useEffect(() => {
@@ -35,10 +37,6 @@ const Profile = () => {
           setImageList(response.data);
       });
   }, []);
-
-  const handleImageClick = (fileUri) => {
-    window.open(fileUri, '_blank');
-};
 
   const onFileChange = (event) => {
     setFiles(event.target.files);
@@ -48,15 +46,20 @@ const Profile = () => {
     setUploaderName(event.target.value);
   };
 
+  const onDescriptionChange = (event) => { // Step 2: Handle description change
+    setDescription(event.target.value);
+  };
+
   const onUpload = (event) => {
     event.preventDefault();
     const formData = new FormData();
-  
+
     for (const key of Object.keys(files)) {
       formData.append('files', files[key]);
     }
     formData.append('name', uploaderName);
-  
+    formData.append('description', description); // Step 4: Include description in form data
+
     FileService.uploadImage(formData)
       .then((response) => {
         console.log(response.data);
@@ -101,26 +104,39 @@ const Profile = () => {
                 </div>
               </MDBCardBody>
             </MDBCard>
-
-            <MDBCard className="mb-4 mb-lg-0">
-            <div>
-            <h2 className='mt-3 text-center mb-5'>My Pets</h2>
-            <div className='row justify-content-center'>
-                {
-                    imageList.map(
-                        image => <div key={image.id} className='px-0 m-2 border bg-light col-3'>
-                            <div className='hovereffect' onClick={() => handleImageClick(image.fileUri)}>
-                                <img src={image.fileUri} width="150" height="150" alt="no"></img>
-                                <div className='overlay'>
-                                    <span className='info text-danger bg-light border border-dark'>{image.uploaderName}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
-            </div>
+            <MDBCard>
+  <Typography variant="h3" gutterBottom>
+    My Pets
+  </Typography>
+  <Grid container spacing={2}>
+  {imageList.map((image) => (
+    <Grid item key={image.id} xs={12}>
+      <Card sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <CardMedia
+          component="img"
+          sx={{ width: '100%', height: 200, objectFit: 'cover' }}
+          image={image.fileUri}
+          alt={image.uploaderName}
+        />
+        <div sx={{ padding: 2, textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            {image.uploaderName}
+          </Typography>
+          <Typography variant="body1">
+            {image.description}
+          </Typography>
         </div>
-            </MDBCard>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+
+
+  
+  
+</MDBCard>
+
+          
           </MDBCol>
           <MDBCol lg="8">
             <MDBCard className="mb-4">
@@ -178,17 +194,32 @@ const Profile = () => {
         <MDBCardBody>
           <MDBCardText className="mb-4"><span className="text-primary font-italic me-1">Upload Image</span></MDBCardText>
           <form onSubmit={onUpload}>
-            <div>
-              <label>Select a file:</label>
-              <input className='mx-2' type='file' name='file' onChange={onFileChange} multiple></input>
-            </div>
+          <div>
+            <label>Select a file:</label>
+            <input type='file' name='file' onChange={onFileChange} multiple />
+          </div>
 
-            <div className="mt-3">
-              <label>Pet Name:</label>
-              <input className='mx-2' type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange}></input>
-            </div>
-            <button className='btn btn-success btn-sm mt-3' type='submit' disabled={!files || !uploaderName}>Upload</button>
-          </form>
+          <div className="mt-3">
+            <label>Pet Name:</label>
+            <input type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange} />
+          </div>
+
+          <div className="mt-3"> 
+            <label>About your pet:</label>
+            <TextField
+              multiline
+              rows={4}
+              variant="outlined"
+              fullWidth
+              value={description}
+              onChange={onDescriptionChange}
+            />
+          </div>
+
+          <Button type='submit' variant="contained" color="primary" disabled={!files || !uploaderName}>
+            Upload
+          </Button>
+        </form>
         </MDBCardBody>
       </MDBCard>
     </MDBCol>
@@ -234,3 +265,6 @@ const Profile = () => {
 
 
 export default Profile;
+
+
+
