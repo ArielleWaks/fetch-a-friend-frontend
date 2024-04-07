@@ -1,10 +1,7 @@
-import { Button, TextField, Typography } from '@mui/material';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import React, { useEffect, useState } from "react";
+import { Button, TextField, Typography, Grid, Card, CardMedia } from '@mui/material';
 import FileService from '../services/FileService';
 import AuthService from "../services/auth.service";
-import { Grid, Card, CardMedia } from '@mui/material';
 
 
 import {
@@ -29,7 +26,7 @@ const Profile = () => {
   const [files, setFiles] = useState(null);
   const [fileUploaded, setFileUploaded] = useState(null);
   const [uploaderName, setUploaderName] = useState('');
-  const [description, setDescription] = useState(''); // Step 1: Add description state
+  const [description, setDescription] = useState('');
   const [imageList, setImageList] = useState([]);
 
   useEffect(() => {
@@ -46,7 +43,7 @@ const Profile = () => {
     setUploaderName(event.target.value);
   };
 
-  const onDescriptionChange = (event) => { // Step 2: Handle description change
+  const onDescriptionChange = (event) => { 
     setDescription(event.target.value);
   };
 
@@ -58,7 +55,7 @@ const Profile = () => {
       formData.append('files', files[key]);
     }
     formData.append('name', uploaderName);
-    formData.append('description', description); // Step 4: Include description in form data
+    formData.append('description', description); 
 
     FileService.uploadImage(formData)
       .then((response) => {
@@ -209,13 +206,20 @@ const Profile = () => {
             <TextField
               multiline
               rows={4}
-              variant="outlined"
+              
               fullWidth
               value={description}
               onChange={onDescriptionChange}
+               InputProps={{
+    sx: {
+      '& fieldset': {
+        borderColor: 'rgba(0, 0, 0, .8)', 
+      },
+    },
+  }}
             />
           </div>
-
+          <br/>
           <Button type='submit' variant="contained" color="primary" disabled={!files || !uploaderName}>
             Upload
           </Button>
