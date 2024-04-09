@@ -107,6 +107,17 @@ export default function CreateJob() {
             </Grid>
             <Grid item xs={6}>
               <TextField
+                label="Animal Type"
+                variant="outlined"
+                fullWidth
+                name="animalType"
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
                 label="Description"
                 variant="outlined"
                 fullWidth

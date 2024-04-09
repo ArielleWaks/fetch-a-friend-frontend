@@ -46,7 +46,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
         avatar={
           <Avatar src="/favavatar.jpeg"/>
         }
-        title={jobObject.description}
+        title={jobObject.chosenAnimalType}
         subheader={jobObject.zipCode}
         action={ deleteEnabled &&
           <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
@@ -56,6 +56,9 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
       />
       <CardContent>
         <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Typography variant="body2">{jobObject.description}</Typography>
+          </Grid>
           <Grid item xs={6}>
             <Typography variant="body2">{"Start Date: " + jobObject.startDate}</Typography>
           </Grid>

@@ -39,30 +39,32 @@ export default function BrowseJobs () {
     
     fetchData();
   }, []);
-  
+
+  /* 
   const deleteCallback = (id) => {
     setJobArray(jobArray.filter((job) => (job.id !== id)));
-  }
+  } */
 
-  const descriptions = [];
+  const animalSelections = [];
 
   for (let i = 0; i < jobData.length; i++){
-    if ((!descriptions.includes(jobData[i].description))){
-    descriptions.push(jobData[i].description);}}
+    if ((!animalSelections.includes(jobData[i].chosenAnimalType))){
+    animalSelections.push(jobData[i].chosenAnimalType);}}
 
   const handleAnimalChange = (event) => {
     const { value } = event.target;
     setSelectedAnimals(value);
   };
 
-  const processSearch = function(event){
+  const processSearch = function(){
     let tempJobArray = [];
-    console.log(selectedAnimals);
+    console.log(jobData);
+
     for (let i = 0; i < selectedAnimals.length; i++){
       const selectedLabel = selectedAnimals[i];
-      const filteredJobs = jobData.filter(job => job.description === selectedLabel);
-      tempJobArray.push(...filteredJobs);
-    }
+      const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
+      tempJobArray.push(...filteredJobs);}
+
     setJobArray(tempJobArray);
   }
   
@@ -83,7 +85,7 @@ export default function BrowseJobs () {
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}
         >
-          {descriptions.map((animal) => (
+          {animalSelections.map((animal) => (
             <MenuItem key={animal} value={animal}>
               <Checkbox checked={selectedAnimals.includes(animal)} />
               <ListItemText primary={animal} />
@@ -96,7 +98,7 @@ export default function BrowseJobs () {
 
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} editEnabled={false} key={id} />
+          <JobCard jobObject={field} id={id} deleteEnabled={false} editEnabled={false} key={id} />
         )
       })}
     </Container>
