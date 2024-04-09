@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
 OutlinedInput, ListItemText} from '@mui/material';
 import JobCard from "./JobCard";
+import GetAnimalData from "./functions/jobSearching";
 
 import EventBus from "../common/EventBus";
 
@@ -45,16 +46,19 @@ export default function BrowseJobs () {
     setJobArray(jobArray.filter((job) => (job.id !== id)));
   } */
 
-  const animalSelections = [];
+  
 
-  for (let i = 0; i < jobData.length; i++){
-    if ((!animalSelections.includes(jobData[i].chosenAnimalType))){
-    animalSelections.push(jobData[i].chosenAnimalType);}}
+  const animalSelections = GetAnimalData(jobData);
 
   const handleAnimalChange = (event) => {
     const { value } = event.target;
     setSelectedAnimals(value);
   };
+
+  const SortByDistanceDescending = function(){
+    //This zip code is a placeholder. The real one will be pulled from the User's profile.
+    let userZipCode = 63074
+  }
 
   const processSearch = function(){
     let tempJobArray = [];

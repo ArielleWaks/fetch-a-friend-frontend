@@ -46,7 +46,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
         avatar={
           <Avatar src="/favavatar.jpeg"/>
         }
-        title={jobObject.chosenAnimalType}
+        title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
         action={ deleteEnabled &&
           <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
