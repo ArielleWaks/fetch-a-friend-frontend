@@ -3,13 +3,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import EventBus from "../common/EventBus";
 import { useNavigate } from "react-router-dom";
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 
 
-export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled }) {
+export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, bookmarkEnabled}) {
   
   const API_URL = "http://localhost:3000/api";
   
   const navigate = useNavigate();
+
+  const handleBookmark = () => {
+    alert("Job Bookmarked!");
+  };
   
   const handleDelete = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -48,10 +53,19 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
         }
         title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
-        action={ deleteEnabled &&
-          <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
-            <DeleteIcon/>
-          </IconButton>
+        action={
+          <React.Fragment>
+            {deleteEnabled &&
+              <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
+                <DeleteIcon/>
+              </IconButton>
+            }
+            {bookmarkEnabled &&
+              <IconButton onClick={handleBookmark}>
+                <BookmarkAddIcon/>
+              </IconButton>
+            }
+          </React.Fragment>
         }
       />
       <CardContent>

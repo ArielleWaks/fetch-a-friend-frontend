@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
 OutlinedInput, ListItemText} from '@mui/material';
 import JobCard from "./JobCard";
-
 import EventBus from "../common/EventBus";
 
 
@@ -42,18 +41,12 @@ export default function BrowseJobs () {
     fetchData();
   }, []);
 
-  /* 
-  const deleteCallback = (id) => {
-    setJobArray(jobArray.filter((job) => (job.id !== id)));
-  } */
-
- 
   
-  const animalSelections = [];
+  const animalOptions = [];
 
   for (let i = 0; i < jobData.length; i++){
-    if ((!animalSelections.includes(jobData[i].chosenAnimalType))){
-    animalSelections.push(jobData[i].chosenAnimalType);}};
+    if ((!animalOptions.includes(jobData[i].chosenAnimalType))){
+    animalOptions.push(jobData[i].chosenAnimalType);}};
 
   const handleAnimalChange = (event) => {
     const { value } = event.target;
@@ -62,9 +55,13 @@ export default function BrowseJobs () {
 
   const handleSortingChange = (event) => {
     const { value } = event.target;
+    
     setSelectedSortingMethod(value);
+    if (selectedSortingMethod === "payHighToLow"){jobData.sort((a, b) => a.payRate - b.payRate);} 
+      else if (selectedSortingMethod === "payLowToHigh"){jobData.sort((a, b) => b.payRate - a.payRate);}
+      else if(selectedSortingMethod === "hoursHighToLow"){jobData.sort((a,b) => a.totalHours - b.totalHours)} 
+      else if(selectedSortingMethod === "hoursLowToHigh"){jobData.sort((a,b) => b.totalHours - a.totalHours)};
   };
-
 
 
 
@@ -76,13 +73,6 @@ export default function BrowseJobs () {
       const selectedLabel = selectedAnimals[i];
       const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
       tempJobArray.push(...filteredJobs);}
-
-      if (selectedSortingMethod === 10){
-        tempJobArray.sort((a, b) => a.payRate - b.payRate);
-      } else if (selectedSortingMethod === 20){
-        tempJobArray.sort((a, b) => b.payRate - a.payRate);
-      }
-      
 
     setJobArray(tempJobArray);
   };
@@ -104,7 +94,7 @@ export default function BrowseJobs () {
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}
         >
-          {animalSelections.map((animal) => (
+          {animalOptions.map((animal) => (
             <MenuItem key={animal} value={animal}>
               <Checkbox checked={selectedAnimals.includes(animal)} />
               <ListItemText primary={animal} />
@@ -113,21 +103,21 @@ export default function BrowseJobs () {
         </Select>
       </FormControl>
 
+      <Button variant="contained" onClick={processSearch}>Search</Button>
+      <br></br>
       <FormControl sx={{ m: 1, width: 200 }}>
-      <Select defaultValue={10} id="sorting-method" onChange={handleSortingChange}>
-        <MenuItem value={10}>Pay Rate Hi-Lo</MenuItem>
-        <MenuItem value={20}>Pay Rate Lo-Hi</MenuItem>
-        <MenuItem value={30}>Hours Hi-Lo</MenuItem>
-        <MenuItem value={40}>Hours Lo-Hi</MenuItem>
+      <Select defaultValue={"Default"} id="sorting-method" onChange={handleSortingChange}>
+        <MenuItem value={"Default"}>Sort By...</MenuItem>
+        <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
+        <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
+        <MenuItem value={"hoursHighToLow"}>Hours Hi-Lo</MenuItem>
+        <MenuItem value={"hoursLowToHigh"}>Hours Lo-Hi</MenuItem>
       </Select>
       </FormControl>
-  
-    
-      <Button variant="contained" onClick={processSearch}>Search</Button>
 
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteEnabled={false} editEnabled={false} key={id} />
+          <JobCard jobObject={field} id={id} deleteEnabled={false} editEnabled={false} bookmarkEnabled={true} key={id} />
         )
       })}
     </Container>
