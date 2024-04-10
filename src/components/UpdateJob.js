@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, TextField, Container, Grid } from '@mui/material';
+import { Button, TextField, Container, Grid, MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import dayjs from "dayjs";
@@ -15,14 +15,33 @@ export default function UpdateJob() {
     zipCode: '',
     payRate: '',
     totalHours: '',
-    description: ''
+    description: '',
+    petName: '',
+    petType: '',
+    petNumber: '',
   });
+  const petTypes = {
+    Dog: 'DOG',
+    Cat: 'CAT',
+    Fish: 'FISH',
+    Bird: 'BIRD',
+    Hamster: 'HAMSTER',
+    Guineapig: 'GUINEAPIG',
+    Rabbit: 'RABBIT',
+    Lizard: 'LIZARD',
+    Turtle: 'TURTLE',
+    Ferret: 'FERRET',
+    Mouse: 'MOUSE',
+    Chinchilla: 'CHINCHILLA'
+  }
   const navigate = useNavigate();
   
   const [errors, setErrors] = useState({
     zipCodeError: false,
     totalHoursError: false,
     payRateError: false,
+    petNumberError: false,
+    petTypeError: false,
   });
   
   const noErrors = () => Object.values(errors).every((value) => (!value));
@@ -53,7 +72,10 @@ export default function UpdateJob() {
           zipCode: json.zipCode,
           payRate: json.payRate,
           totalHours: json.totalHours,
-          description: json.description
+          description: json.description,
+          petName: json.petName,
+          petType: json.petType,
+          petNumber: json.petNumber,
         });
       } catch (error) {
         console.log(error);
@@ -93,6 +115,15 @@ export default function UpdateJob() {
   const handleChange = (e) => {
     const {name, value} = e.target;
     setFormData({...formData, [name]: value});
+  };
+  
+  const handlePetChange = (e) => {
+    const {value} = e.target;
+    setErrors({
+      ...errors,
+      petTypeError: value === "None" || value === undefined || value === ""
+    });
+    setFormData({...formData, petType: value});
   };
   
   const handleStartDateChange = (e) => {
@@ -204,6 +235,56 @@ export default function UpdateJob() {
                 label="End Date"
                 minDate={formData.startDate}
                 disablePast
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Pet Name(s)"
+                variant="outlined"
+                fullWidth
+                name="petName"
+                value={formData.petName}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                value={formData.petType}
+                label="Pet Species"
+                fullWidth
+                required
+                error={errors.petTypeError}
+                helperText={errors.petTypeError ? 'Select Pet Species' : ''}
+                onChange={handlePetChange}
+                select // tell TextField to render select
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {Object.keys(petTypes).sort().map((key)=>
+                  <MenuItem key={key} value={petTypes[key]}>{key}</MenuItem>
+                )}
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Number of Pets"
+                variant="outlined"
+                fullWidth
+                name="petNumber"
+                value={formData.petNumber}
+                error={errors.petNumberError}
+                helperText={errors.petNumberError ? 'Positive Whole Number of Pets' : ''}
+                onChange={(event) => {
+                  const pets = event.target.value;
+                  setErrors({
+                    ...errors,
+                    petNumberError: isNaN(Number(pets)) || pets <= 0 || !Number.isInteger(Number(pets))
+                  });
+                  setFormData({...formData, petNumber: pets});
+                }}
                 required
               />
             </Grid>

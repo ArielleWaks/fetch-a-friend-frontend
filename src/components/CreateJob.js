@@ -47,6 +47,7 @@ export default function CreateJob() {
     totalHoursError: false,
     payRateError: false,
     petNumberError: false,
+    petTypeError: false,
   });
   
   const noErrors = () => Object.values(errors).every((value) => (!value));
@@ -91,6 +92,10 @@ export default function CreateJob() {
   
   const handlePetChange = (e) => {
     const {value} = e.target;
+    setErrors({
+      ...errors,
+      petTypeError: value === "None" || value === undefined || value === ""
+    });
     setFormData({...formData, petType: value});
   };
   
@@ -221,6 +226,9 @@ export default function CreateJob() {
                 value={formData.petType}
                 label="Pet Species"
                 fullWidth
+                required
+                error={errors.petTypeError}
+                helperText={errors.petTypeError ? 'Select Pet Species' : ''}
                 onChange={handlePetChange}
                 select // tell TextField to render select
               >
@@ -240,11 +248,12 @@ export default function CreateJob() {
                 name="petNumber"
                 value={formData.petNumber}
                 error={errors.petNumberError}
+                helperText={errors.petNumberError ? 'Positive Whole Number of Pets' : ''}
                 onChange={(event) => {
                   const pets = event.target.value;
                   setErrors({
                     ...errors,
-                    petNumberError: isNaN(Number(pets)) || pets <= 0
+                    petNumberError: isNaN(Number(pets)) || pets <= 0 || !Number.isInteger(Number(pets))
                   });
                   setFormData({...formData, petNumber: pets});
                 }}
