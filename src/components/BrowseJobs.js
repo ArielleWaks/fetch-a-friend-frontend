@@ -61,6 +61,8 @@ export default function BrowseJobs () {
       else if (selectedSortingMethod === "payLowToHigh"){jobData.sort((a, b) => b.payRate - a.payRate);}
       else if(selectedSortingMethod === "hoursHighToLow"){jobData.sort((a,b) => a.totalHours - b.totalHours)} 
       else if(selectedSortingMethod === "hoursLowToHigh"){jobData.sort((a,b) => b.totalHours - a.totalHours)};
+
+    setJobArray(jobData);
   };
 
 
@@ -79,13 +81,13 @@ export default function BrowseJobs () {
   
   return (
     <Container>
-      <Typography varient="h1">
-        Search jobs by...
+      <Typography variant="h3" align="center">
+        Fetch a Job
       </Typography>
 
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="animal-type-filter">Animal</InputLabel>
-        <Select
+        <Select 
           labelId="animal-select-checkbox"
           id="animal-select"
           multiple
@@ -103,10 +105,11 @@ export default function BrowseJobs () {
         </Select>
       </FormControl>
 
-      <Button variant="contained" onClick={processSearch}>Search</Button>
+      <Button variant="contained" onClick={processSearch}>Search!</Button>
       <br></br>
       <FormControl sx={{ m: 1, width: 200 }}>
-      <Select defaultValue={"Default"} id="sorting-method" onChange={handleSortingChange}>
+      <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
+      <Select value={selectedSortingMethod} id="sorting-method" onChange={handleSortingChange}>
         <MenuItem value={"Default"}>Sort By...</MenuItem>
         <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
         <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
