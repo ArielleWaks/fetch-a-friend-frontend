@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
-OutlinedInput, ListItemText} from '@mui/material';
+OutlinedInput, ListItemText, Autocomplete, TextField} from '@mui/material';
 import JobCard from "./JobCard";
 import EventBus from "../common/EventBus";
 
@@ -37,17 +37,28 @@ export default function BrowseJobs () {
         }
       }
     }
-    
     fetchData();
   }, []);
 
+  //Creates a list of possible zip codes based on the jobData
+  const zipCodeOptions = [];
   
+  for (let i = 0; i < jobData.length; i++){
+    if((!zipCodeOptions.includes(String(jobData[i].zipCode)))){
+      zipCodeOptions.push(String(jobData[i].zipCode));
+    }};
+  
+  zipCodeOptions.sort((a,b) => a - b);
+    
+  
+  //Creates a list of possible animal types based on the jobData
   const animalOptions = [];
 
   for (let i = 0; i < jobData.length; i++){
     if ((!animalOptions.includes(jobData[i].chosenAnimalType))){
     animalOptions.push(jobData[i].chosenAnimalType);}};
 
+  //User input handler functions
   const handleAnimalChange = (event) => {
     const { value } = event.target;
     setSelectedAnimals(value);
@@ -57,27 +68,21 @@ export default function BrowseJobs () {
     const { value } = event.target;
     console.log(value);
     
-    setSelectedSortingMethod(value);
-  };
+    setSelectedSortingMethod(value);};
   
   useEffect(() => {
-    let sortedData = [...jobData]; // Create a copy of jobData
+    let sortedData = [...jobData];
   
-    if (selectedSortingMethod === "payHighToLow") {
-      sortedData.sort((a, b) => b.payRate - a.payRate);
-    } else if (selectedSortingMethod === "payLowToHigh") {
-      sortedData.sort((a, b) => a.payRate - b.payRate);
-    } else if (selectedSortingMethod === "hoursHighToLow") {
-      sortedData.sort((a, b) => b.totalHours - a.totalHours);
-    } else if (selectedSortingMethod === "hoursLowToHigh") {
-      sortedData.sort((a, b) => a.totalHours - b.totalHours);
-    }
+    if (selectedSortingMethod === "payHighToLow") {sortedData.sort((a, b) => b.payRate - a.payRate);} 
+    else if (selectedSortingMethod === "payLowToHigh") {sortedData.sort((a, b) => a.payRate - b.payRate);} 
+    else if (selectedSortingMethod === "hoursHighToLow") {sortedData.sort((a, b) => b.totalHours - a.totalHours);} 
+    else if (selectedSortingMethod === "hoursLowToHigh") {sortedData.sort((a, b) => a.totalHours - b.totalHours);}
   
     setJobArray(sortedData);
   }, [selectedSortingMethod, jobData]);
 
 
-
+  //Function for when submit button is pressed
   const processSearch = function(){
     let tempJobArray = [];
     console.log(jobData);
@@ -90,6 +95,7 @@ export default function BrowseJobs () {
     setJobArray(tempJobArray);
   };
   
+  //html
   return (
     <Container>
       <Typography variant="h3" align="center">
@@ -105,8 +111,7 @@ export default function BrowseJobs () {
           value={selectedAnimals}
           onChange={handleAnimalChange}
           input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-        >
+          renderValue={(selected) => selected.join(', ')}>
           {animalOptions.map((animal) => (
             <MenuItem key={animal} value={animal}>
               <Checkbox checked={selectedAnimals.includes(animal)} />
@@ -116,7 +121,13 @@ export default function BrowseJobs () {
         </Select>
       </FormControl>
 
-      <Button variant="contained" onClick={processSearch}>Search!</Button>
+      <FormControl sx={{m: 1, width: 200 }}>
+        <Autocomplete disablePortal id="combo-box-demo" options={zipCodeOptions} sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Zip Code" />}
+        />
+      </FormControl>
+      <br></br>
+      <Button variant="contained" align="center" onClick={processSearch}>Search!</Button>
       <br></br>
       <FormControl sx={{ m: 1, width: 200 }}>
       <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
