@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 
 const API_URL = "http://localhost:3000/api";
 
-export default function MyJobs () {
+export default function MyJobsSitting () {
   const [jobArray, setJobArray] = useState([]);
   const navigate = useNavigate();
   
@@ -18,7 +18,7 @@ export default function MyJobs () {
     async function fetchData() {
       const user = JSON.parse(localStorage.getItem('user'));
       try {
-        const response = await fetch(API_URL + '/jobs/myjobs', {
+        const response = await fetch(API_URL + '/jobs/mysitting', {
           headers: {
             'Authorization': 'Bearer ' + user.accessToken,
             'Content-Type': 'application/json'
@@ -41,11 +41,11 @@ export default function MyJobs () {
   return (
     <Container>
       <Typography variant="h3">
-        My Jobs
+        My Pet Sitting
       </Typography>
       {jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} editEnabled={true} acceptEnabled={false} key={id} />
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} editEnabled={false} acceptEnabled={false} key={id} />
         )
       })}
     </Container>
