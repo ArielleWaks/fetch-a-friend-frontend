@@ -44,12 +44,20 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
       }
     }
   }
+
+  const animalIcon = (jobObject) =>{
+    if (jobObject.chosenAnimalType === "Dog"){return "/favavatar.jpeg"}
+    else if(jobObject.chosenAnimalType === "Cat"){return "/Cat-icon_30345.png"}
+    else if(jobObject.chosenAnimalType === "Fish"){return "/fish_icon.png"}
+    else if(jobObject.chosenAnimalType === "Bird"){return "/bird_icon.png"}
+    else if(jobObject.chosenAnimalType === "Lizard"){return "/lizard_icon.png"}
+  }
   
   return (
     <Card variant="outlined" >
       <CardHeader
         avatar={
-          <Avatar src="/favavatar.jpeg"/>
+          <Avatar src={animalIcon(jobObject)}/>
         }
         title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
