@@ -2,14 +2,19 @@ import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Bu
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 
 
-export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled }) {
-  
+export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
+
   const API_URL = "http://localhost:3000/api";
   
   const navigate = useNavigate();
-  
+
+  const handleBookmark = () => {
+    alert("Job Bookmarked!");
+  };
+
   const handleAcceptJob = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
@@ -29,7 +34,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
       console.log(error);
     }
   }
-  
+
   const handleDelete = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
@@ -49,23 +54,43 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
       console.log(error);
     }
   }
-  
+
+  const animalIcon = (jobObject) =>{
+    if (jobObject.chosenAnimalType === "Dog"){return "/favavatar.jpeg"}
+    else if(jobObject.chosenAnimalType === "Cat"){return "/Cat-icon_30345.png"}
+    else if(jobObject.chosenAnimalType === "Fish"){return "/fish_icon.png"}
+    else if(jobObject.chosenAnimalType === "Bird"){return "/bird_icon.png"}
+    else if(jobObject.chosenAnimalType === "Lizard"){return "/lizard_icon.png"}
+  }
+
   return (
     <Card variant="outlined" >
       <CardHeader
         avatar={
-          <Avatar src="/favavatar.jpeg"/>
+          <Avatar src={animalIcon(jobObject)}/>
         }
-        title={jobObject.description}
+        title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
-        action={ deleteEnabled &&
-          <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
-            <DeleteIcon/>
-          </IconButton>
+        action={
+          <React.Fragment>
+            {deleteEnabled &&
+              <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
+                <DeleteIcon/>
+              </IconButton>
+            }
+            {bookmarkEnabled &&
+              <IconButton onClick={handleBookmark}>
+                <BookmarkAddIcon/>
+              </IconButton>
+            }
+          </React.Fragment>
         }
       />
       <CardContent>
         <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Typography variant="body2">{jobObject.description}</Typography>
+          </Grid>
           <Grid item xs={6}>
             <Typography variant="body2">{"Start Date: " + jobObject.startDate}</Typography>
           </Grid>
