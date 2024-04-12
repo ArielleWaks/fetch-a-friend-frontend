@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
-OutlinedInput, ListItemText, Autocomplete, TextField} from '@mui/material';
+OutlinedInput, ListItemText, Autocomplete, TextField, Box} from '@mui/material';
 import { Link } from "react-router-dom";
-import { Container, Typography, Box } from '@mui/material';
 import JobCard from "./JobCard";
 import EventBus from "../common/EventBus";
 
@@ -21,7 +20,7 @@ export default function BrowseJobs () {
     setUser(user);
     async function fetchData() {
       try {
-        const response = await fetch(API_URL + '/jobs/open', {
+        const response = await fetch(API_URL + '/jobs', {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -29,6 +28,7 @@ export default function BrowseJobs () {
         const json = await response.json()
         setJobArray(json);
         setJobData(json);
+        console.log(json);
       } catch (error) {
         const errorMessage =
           (error.response &&
@@ -159,7 +159,6 @@ export default function BrowseJobs () {
         return (
           <JobCard jobObject={field}
                    id={id}
-                   deleteCallback={deleteCallback}
                    deleteEnabled={false}
                    editEnabled={false}
                    bookmarkEnabled={true}
