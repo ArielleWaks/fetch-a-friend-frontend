@@ -7,6 +7,10 @@ const getPublicContent = () => {
   return axios.get(API_URL + "all");
 };
 
+const getImageContent = () => {
+  return axios.get("http://localhost:8080/file/upload");
+};
+
 const getUserBoard = () => {
   return axios.get(API_URL + "user", { headers: authHeader() });
 };
@@ -28,7 +32,8 @@ const UserService = {
   getUserBoard,
   getModeratorBoard,
   getAdminBoard,
-  getJobBoard
+  getJobBoard,
+  getImageContent
 };
 
 export default UserService;
