@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Loader } from "@googlemaps/js-api-loader"
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form,Alert } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Marker, GoogleMap, LoadScript, InfoWindow } from '@react-google-maps/api';
 import MarkerNames from './MarkerNames';
+import ContactListButton from './ContactListButton';
 
 function TestApp() {
   const [zipCode, setZipCode] = useState('');
@@ -13,11 +14,16 @@ function TestApp() {
   const [selectedMarker, setSelectedMarker] = useState(null);
   // const [addresses,setAddresses] = useState([])
   const [markersData,setMarkersData]=useState([]);
+  const [error,setError] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.get(`/clients/search?zipCode=${zipCode}`);
+      if (response.data.length ===0){
+        setError("No results with given Zipcode.")
+        return;
+      }
       const jobs = response.data;
 
       const jobAddresses = response.data.map(job => job.address);
@@ -32,8 +38,9 @@ function TestApp() {
         name: jobNames[index].data.name,
         address: jobAddresses[index] // Associate each marker with its address
       }));
-      setMarkersData(markersData);
+      setMarkersData(markersData); // array of objects contains marker data
       // console.log(selectedMarker)
+      setError(null);
       
     } catch (error) {
       console.error('Error fetching job markers:', error);
@@ -84,7 +91,7 @@ function TestApp() {
           </Col>
         </Row>
       </Form>
-      
+      {error && <Alert variant="danger">{error}</Alert>}
       <div style={{ height: '50vh', width: '50vw'}}>
         <LoadScript
           googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAP_API}
@@ -115,7 +122,8 @@ function TestApp() {
           </GoogleMap>
         </LoadScript>
       </div>
-      <MarkerNames markers={markersData}/> 
+      {/* <MarkerNames markers={markersData}/>  */}
+      <ContactListButton markers={markersData}/>
     </div>
   );
 }
