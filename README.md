@@ -1,1 +1,1 @@
-# fancy-rats
+Fetch a Friend
