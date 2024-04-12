@@ -1,13 +1,12 @@
 import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
-import EventBus from "../common/EventBus";
 import { useNavigate } from "react-router-dom";
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 
 
-export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, bookmarkEnabled}) {
-  
+export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
+
   const API_URL = "http://localhost:3000/api";
   
   const navigate = useNavigate();
@@ -15,7 +14,27 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   const handleBookmark = () => {
     alert("Job Bookmarked!");
   };
-  
+
+  const handleAcceptJob = (id, _e) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    try {
+      const response = fetch(API_URL + '/jobs/sitter/' + id, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + user.accessToken,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.status === 401) {
+        localStorage.removeItem("user");
+        navigate('/login');
+      }
+      navigate('/jobs/mysitting');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleDelete = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
@@ -32,16 +51,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
       }
       deleteCallback(id);
     } catch (error) {
-      const errorMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      console.log(errorMessage);
-      if (error.response && error.response.status === 401) {
-        EventBus.dispatch("logout");
-      }
+      console.log(error);
     }
   }
 
@@ -52,7 +62,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
     else if(jobObject.chosenAnimalType === "Bird"){return "/bird_icon.png"}
     else if(jobObject.chosenAnimalType === "Lizard"){return "/lizard_icon.png"}
   }
-  
+
   return (
     <Card variant="outlined" >
       <CardHeader
@@ -93,11 +103,28 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
           <Grid item xs={6}>
             <Typography variant="body2">{"Hours: " + jobObject.totalHours}</Typography>
           </Grid>
+          { editEnabled &&
+            <Grid item xs={6}>
+              <Typography variant="body2">{"Job Status:" + jobObject.jobStatus.replace("STATUS_", " ")}</Typography>
+            </Grid>
+          }
+          { Object.is(jobObject.jobStatus, "STATUS_CLAIMED") && editEnabled &&
+            <Grid item xs={6}>
+              <Typography variant="body2">{"Pet Sitter: " + jobObject.sitter.username }</Typography>
+            </Grid>
+          }
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        { editEnabled &&
-          <Button size="small" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >Edit</Button>
+        { editEnabled && Object.is(jobObject.jobStatus, "STATUS_OPEN") &&
+          <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
+            Edit
+          </Button>
+        }
+        { acceptEnabled &&
+          <Button size="small" variant="contained" onClick={(e) => handleAcceptJob(jobObject.id, e)} >
+            Accept Job
+          </Button>
         }
       </CardActions>
     </Card>
