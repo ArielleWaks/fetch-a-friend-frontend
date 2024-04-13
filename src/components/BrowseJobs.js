@@ -14,6 +14,7 @@ export default function BrowseJobs () {
   const [selectedSortingMethod, setSelectedSortingMethod] = useState([]);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [user, setUser] = useState()
+  const [selectedZipCode, setSelectedZipCode] = useState(0);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -28,7 +29,6 @@ export default function BrowseJobs () {
         const json = await response.json()
         setJobArray(json);
         setJobData(json);
-        console.log(json);
       } catch (error) {
         const errorMessage =
           (error.response &&
@@ -71,12 +71,13 @@ export default function BrowseJobs () {
 
   const handleSortingChange = (event) => {
     const { value } = event.target;
-    console.log(value);
+    setSelectedSortingMethod(value);
+  };
 
-    setSelectedSortingMethod(value);};
+  const handleZipCodeChange = (event, value) => { setSelectedZipCode(Number(value)); };
 
   useEffect(() => {
-    let sortedData = [...jobData];
+    let sortedData = [...jobArray];
 
     if (selectedSortingMethod === "payHighToLow") {sortedData.sort((a, b) => b.payRate - a.payRate);}
     else if (selectedSortingMethod === "payLowToHigh") {sortedData.sort((a, b) => a.payRate - b.payRate);}
@@ -96,6 +97,8 @@ export default function BrowseJobs () {
       const selectedLabel = selectedAnimals[i];
       const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
       tempJobArray.push(...filteredJobs);}
+
+      if (selectedZipCode){tempJobArray = tempJobArray.filter(job => job.zipCode === selectedZipCode);}
 
     setJobArray(tempJobArray);
   };
@@ -137,13 +140,16 @@ export default function BrowseJobs () {
       </FormControl>
 
       <FormControl sx={{m: 1, width: 200 }}>
-        <Autocomplete disablePortal id="combo-box-demo" options={zipCodeOptions} sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Zip Code" />}
+        <Autocomplete id="zip-code-options" options={zipCodeOptions} sx={{ width: 300 }}
+        onChange={handleZipCodeChange} renderInput={(params) => <TextField {...params} label="Zip Code" />}
         />
       </FormControl>
+
       <br></br>
+
       <Button variant="contained" align="center" onClick={processSearch}>Search!</Button>
       <br></br>
+
       <FormControl sx={{ m: 1, width: 200 }}>
       <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
       <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
