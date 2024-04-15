@@ -18,9 +18,9 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   const identification = open ? 'simple-popper' : undefined;
 
 const handleBookmarkClick = (event) => {
-  setAnchor(anchor ? null : event.currentTarget);
+  setAnchor(true);
   setTimeout(function() { 
-    setAnchor(anchor ? null : event.currentTarget);
+    setAnchor(false);
   }, 2000); 
 
 };
@@ -159,15 +159,6 @@ const grey = {
   700: '#434D5B',
   800: '#303740',
   900: '#1C2025',
-};
-
-const blue = {
-  200: '#99CCFF',
-  300: '#66B2FF',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  700: '#0066CC',
 };
 
 const PopupBody = styled('div')(

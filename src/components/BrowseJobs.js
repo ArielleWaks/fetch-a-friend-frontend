@@ -15,6 +15,7 @@ export default function BrowseJobs () {
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [user, setUser] = useState()
   const [selectedZipCode, setSelectedZipCode] = useState(0);
+  const [hasSearchedChanged, setHasSearchChanged] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -72,11 +73,13 @@ export default function BrowseJobs () {
   const handleSortingChange = (event) => {
     const { value } = event.target;
     setSelectedSortingMethod(value);
+    setHasSearchChanged(true);
   };
 
   const handleZipCodeChange = (event, value) => { setSelectedZipCode(Number(value)); };
 
   useEffect(() => {
+    if(hasSearchedChanged){
     let sortedData = [...jobArray];
 
     if (selectedSortingMethod === "payHighToLow") {sortedData.sort((a, b) => b.payRate - a.payRate);}
@@ -85,7 +88,9 @@ export default function BrowseJobs () {
     else if (selectedSortingMethod === "hoursLowToHigh") {sortedData.sort((a, b) => a.totalHours - b.totalHours);}
 
     setJobArray(sortedData);
-  }, [selectedSortingMethod, jobData]);
+    setHasSearchChanged(false);
+  }
+  }, [selectedSortingMethod, hasSearchedChanged, jobArray]);
 
 
   //Function for when submit button is pressed
@@ -101,13 +106,14 @@ export default function BrowseJobs () {
       if (selectedZipCode){tempJobArray = tempJobArray.filter(job => job.zipCode === selectedZipCode);}
 
     setJobArray(tempJobArray);
+    setHasSearchChanged(true);
   };
 
   //html
   return (
     <Container>
       <Typography variant="h3" align="center">
-        Fetch a Job
+        Browse Available Jobs
       </Typography>
       {(Object.is(user, null)) &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
