@@ -23,6 +23,7 @@ import UpdateJob from "./components/UpdateJob";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import TestApp from "./components/TestMapComponent";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -149,6 +150,8 @@ const App = () => {
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
             <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
+            <Route path="/map-search/entry" element={<TestApp/>} />
+            <Route path="/map-search" element={<MapSearch />} />
           </Routes>
         </div>
 
