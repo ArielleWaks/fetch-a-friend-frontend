@@ -19,11 +19,11 @@ import CreateJob from "./components/CreateJob";
 import MyJobs from "./components/MyJobs";
 import MyJobsSitting from "./components/MyJobsSitting";
 import UpdateJob from "./components/UpdateJob";
-
+import TestApp from "./components/TestMapComponent";
+import MapSearch from "./components/MapSearchComponent";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import TestApp from "./components/TestMapComponent";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -150,8 +150,8 @@ const App = () => {
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
             <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
-            <Route path="/map-search/entry" element={<TestApp/>} />
-            <Route path="/map-search" element={<MapSearch />} />
+            <Route path="/map-search" element={<TestApp/>} />
+            {/* <Route path="/map-search" element={<MapSearch />} /> */}
           </Routes>
         </div>
 
