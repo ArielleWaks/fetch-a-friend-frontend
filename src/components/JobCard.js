@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
-
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
@@ -17,12 +17,32 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   const open = Boolean(anchor);
   const identification = open ? 'simple-popper' : undefined;
 
-const handleBookmarkClick = (event) => {
-  setAnchor(true);
+/* const handleBookmarkClick = (event) => {
+  setAnchor(anchor ? null : event.currentTarget);
   setTimeout(function() { 
-    setAnchor(false);
+    setAnchor(anchor ? null : event.currentTarget);
   }, 2000); 
 
+}; */
+
+const handleBookmarkClick = async () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const jobId = jobObject.id; // Ensure jobObject.id is correctly obtained
+  const url = `${API_URL}/jobs/${jobId}/bookmark`; // Include jobId in the URL
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'Bearer ' + user.accessToken,
+      'Content-Type': 'application/json'
+    }
+  });
+  if (response.ok) {
+    console.log('Bookmark toggled successfully');
+  } else if (response.status === 401) {
+    navigate('/login');
+  } else {
+    console.error('Failed to toggle bookmark');
+  }
 };
   
   const navigate = useNavigate();
