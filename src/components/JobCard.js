@@ -27,8 +27,8 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 
 const handleBookmarkClick = async () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  const jobId = jobObject.id; // Ensure jobObject.id is correctly obtained
-  const url = `${API_URL}/jobs/${jobId}/bookmark`; // Include jobId in the URL
+  const jobId = jobObject.id;
+  const url = `${API_URL}/jobs/${jobId}/bookmark`;
   const response = await fetch(url, {
     method: 'PUT',
     headers: {
