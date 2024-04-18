@@ -24,6 +24,7 @@ import MapSearch from "./components/MapSearchComponent";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import ChatRoom from "./components/ChatRoomComponent";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -151,7 +152,7 @@ const App = () => {
             <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
             <Route path="/map-search" element={<TestApp/>} />
-            {/* <Route path="/map-search" element={<MapSearch />} /> */}
+            <Route path="/chatroom" element={<ChatRoom />} />
           </Routes>
         </div>
 

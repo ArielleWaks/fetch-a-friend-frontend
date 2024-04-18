@@ -1,9 +1,12 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const ContactListButton = ({markers}) => {
+    const navigate =useNavigate(); 
     const handleContactClick = (name) => {
         console.log(`clicked for${name}`);
+        navigate('/chatroom');
     };
     return (
         <div>

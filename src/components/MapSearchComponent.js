@@ -8,7 +8,7 @@ class MapSearch extends Component {
 
   async componentDidMount() {
     try {
-      const response = await fetch('/clients'); // Assuming this endpoint fetches client data
+      const response = await fetch('/clients'); //  this endpoint fetches client data
       const body = await response.json();
       this.setState({ clients: body });
     } catch (error) {
@@ -25,8 +25,7 @@ class MapSearch extends Component {
             <h2>Let's Fetch A Friend</h2>
             {clients.map(client =>
               <div key={client.id}>
-                {/* Render client data here */}
-                {/* For example: {client.name} ({client.email}) */}
+                
               </div>
             )}
           </div>

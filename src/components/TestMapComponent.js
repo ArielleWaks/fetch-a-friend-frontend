@@ -124,7 +124,7 @@ function TestApp() {
           </GoogleMap>
         </LoadScript>
       </div>
-      {/* <MarkerNames markers={markersData}/>  */}
+      
       <ContactListButton markers={markersData}/>
     </div>
   );

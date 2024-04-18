@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@material/button": "^14.0.0",
     "@mui/icons-material": "^5.15.15",
     "@mui/x-date-pickers": "^7.2.0",
     "@react-google-maps/api": "^2.19.3",
@@ -23,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
+    "react-stomp": "^5.1.0",
     "react-validation": "^3.0.7",
     "use-places-autocomplete": "^4.0.1",
     "validator": "^13.11.0",
