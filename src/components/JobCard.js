@@ -1,10 +1,8 @@
 import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { styled } from '@mui/system';
 import animalAvatarSelector from "./functions/animalAvatarSelector";
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
@@ -12,11 +10,6 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
 
   const API_URL = "http://localhost:3000/api";
-
-  //Bookmark confirmation popup stuff
-  const [anchor, setAnchor] = React.useState(null);
-  const open = Boolean(anchor);
-  const identification = open ? 'simple-popper' : undefined;
 
 
   const user = JSON.parse(localStorage.getItem('user'));
@@ -26,14 +19,6 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   }
 
   const [isBookmarked, setIsBookmarked] = useState(bookmarkChecker);
-
-/* const handleBookmarkClick = (event) => {
-  setAnchor(anchor ? null : event.currentTarget);
-  setTimeout(function() { 
-    setAnchor(anchor ? null : event.currentTarget);
-  }, 2000); 
-
-}; */
 
 
 
@@ -54,13 +39,8 @@ const handleBookmarkClick = async (event) => {
     if (response.ok) {
 
       if(!isBookmarked){
-        setAnchor(anchor ? null : event.currentTarget);
-        setTimeout(function() { 
-        setAnchor(anchor ? null : event.currentTarget);
-        }, 2000); 
         setIsBookmarked(!isBookmarked);
-        
-      }
+      } else{setIsBookmarked(!isBookmarked);}
     } else if (response.status === 401) {
       localStorage.removeItem("user");
       navigate('/login');
@@ -138,8 +118,6 @@ const handleBookmarkClick = async (event) => {
                 <IconButton onClick={handleBookmarkClick}>
                 {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddOutlinedIcon />}
                 </IconButton>
-                <BasePopup id={identification} placement="top" open={open} anchor={anchor}>
-                <PopupBody>Job Bookmarked!</PopupBody></BasePopup>
               </div>
             }
           </React.Fragment>
@@ -189,37 +167,3 @@ const handleBookmarkClick = async (event) => {
     </Card>
   )
 }
-
-
-const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
-};
-
-const PopupBody = styled('div')(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  box-shadow: ${
-    theme.palette.mode === 'dark'
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  z-index: 1;
-`,
-);
