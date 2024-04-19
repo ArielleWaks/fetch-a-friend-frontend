@@ -18,6 +18,7 @@ import {
   MDBProgressBar,
   MDBRow
 } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -28,6 +29,13 @@ const Profile = () => {
   const [uploaderName, setUploaderName] = useState('');
   const [description, setDescription] = useState('');
   const [imageList, setImageList] = useState([]);
+
+  //implementing useNavigate
+  const navigate = useNavigate();
+  const handleMessageClick = () =>{
+    console.log('message clicked')
+    navigate('/chatroom');
+  }
 
   useEffect(() => {
       FileService.getAllImages().then((response) => {
@@ -97,7 +105,7 @@ const Profile = () => {
                 <p className="text-muted mb-4">St. Louis, MO</p>
                 <div className="d-flex justify-content-center mb-2">
                   <MDBBtn>Follow</MDBBtn>
-                  <MDBBtn outline className="ms-1">Message</MDBBtn>
+                  <MDBBtn onClick={()=>handleMessageClick()} outline className="ms-1">Message</MDBBtn>
                 </div>
               </MDBCardBody>
             </MDBCard>
