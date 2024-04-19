@@ -12,7 +12,9 @@ export default function BrowseJobs () {
   const [selectedSortingMethod, setSelectedSortingMethod] = useState([]);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [user, setUser] = useState()
-  
+  const [selectedZipCode, setSelectedZipCode] = useState(0);
+  const [hasSearchedChanged, setHasSearchChanged] = useState(false);
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     setUser(user);
@@ -26,7 +28,6 @@ export default function BrowseJobs () {
         const json = await response.json()
         setJobArray(json);
         setJobData(json);
-        console.log(json);
       } catch (error) {
         const errorMessage =
           (error.response &&
@@ -69,12 +70,15 @@ export default function BrowseJobs () {
 
   const handleSortingChange = (event) => {
     const { value } = event.target;
-    console.log(value);
+    setSelectedSortingMethod(value);
+    setHasSearchChanged(true);
+  };
 
-    setSelectedSortingMethod(value);};
+  const handleZipCodeChange = (event, value) => { setSelectedZipCode(Number(value)); };
 
   useEffect(() => {
-    let sortedData = [...jobData];
+    if(hasSearchedChanged){
+    let sortedData = [...jobArray];
 
     if (selectedSortingMethod === "payHighToLow") {sortedData.sort((a, b) => b.payRate - a.payRate);}
     else if (selectedSortingMethod === "payLowToHigh") {sortedData.sort((a, b) => a.payRate - b.payRate);}
@@ -82,7 +86,9 @@ export default function BrowseJobs () {
     else if (selectedSortingMethod === "hoursLowToHigh") {sortedData.sort((a, b) => a.totalHours - b.totalHours);}
 
     setJobArray(sortedData);
-  }, [selectedSortingMethod, jobData]);
+    setHasSearchChanged(false);
+  }
+  }, [selectedSortingMethod, hasSearchedChanged, jobArray]);
 
 
   //Function for when submit button is pressed
@@ -95,14 +101,17 @@ export default function BrowseJobs () {
       const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
       tempJobArray.push(...filteredJobs);}
 
+      if (selectedZipCode){tempJobArray = tempJobArray.filter(job => job.zipCode === selectedZipCode);}
+
     setJobArray(tempJobArray);
+    setHasSearchChanged(true);
   };
 
   //html
   return (
     <Container>
-      <Typography variant="h3" align="center" gutterBottom>
-        Fetch a Job
+      <Typography variant="h3" align="center">
+        Browse Available Jobs
       </Typography>
       {user === null &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
@@ -135,13 +144,16 @@ export default function BrowseJobs () {
       </FormControl>
 
       <FormControl sx={{m: 1, width: 200 }}>
-        <Autocomplete disablePortal id="combo-box-demo" options={zipCodeOptions} sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Zip Code" />}
+        <Autocomplete id="zip-code-options" options={zipCodeOptions} sx={{ width: 300 }}
+        onChange={handleZipCodeChange} renderInput={(params) => <TextField {...params} label="Zip Code" />}
         />
       </FormControl>
+
       <br></br>
+
       <Button variant="contained" align="center" onClick={processSearch}>Search!</Button>
       <br></br>
+
       <FormControl sx={{ m: 1, width: 200 }}>
       <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
       <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
