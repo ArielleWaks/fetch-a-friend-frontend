@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import animalAvatarSelector from "./functions/animalAvatarSelector";
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import bookmarkUpdate from "./functions/bookmarkUpdate";
 
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
@@ -21,35 +22,10 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   const [isBookmarked, setIsBookmarked] = useState(bookmarkChecker);
 
 
-
-const handleBookmarkClick = async (event) => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const jobId = jobObject.id;
-  const url = `${API_URL}/jobs/bookmark/${jobId}`;
-  
-  try {
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + user.accessToken,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-
-      if(!isBookmarked){
-        setIsBookmarked(!isBookmarked);
-      } else{setIsBookmarked(!isBookmarked);}
-    } else if (response.status === 401) {
-      localStorage.removeItem("user");
-      navigate('/login');
-    } else {
-      console.error("Error:", response.statusText);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
+//
+const handleBookmarkClick = () => {
+  bookmarkUpdate(jobObject, API_URL, navigate);
+  setIsBookmarked(!isBookmarked);
 };
   
   const navigate = useNavigate();
