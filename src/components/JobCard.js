@@ -12,23 +12,24 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 
   const API_URL = "http://localhost:3000/api";
 
-
+  //Checks to see if a user has a job bookmarked or not.
   const user = JSON.parse(localStorage.getItem('user'));
   let bookmarkChecker = false;
   for(let i = 0; i < jobObject.usersWhoBookmarked.length; i++){
     if (jobObject.usersWhoBookmarked[i].id === user.id){bookmarkChecker = true;}
   }
-
   const [isBookmarked, setIsBookmarked] = useState(bookmarkChecker);
 
 
-//
+  const navigate = useNavigate();
+
+
+//Bookmarks or un-bookmarks a job, then swaps the bookmarking icon.
 const handleBookmarkClick = () => {
   bookmarkUpdate(jobObject, API_URL, navigate);
   setIsBookmarked(!isBookmarked);
 };
   
-  const navigate = useNavigate();
 
   const handleAcceptJob = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
