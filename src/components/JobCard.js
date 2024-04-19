@@ -29,20 +29,27 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 const handleBookmarkClick = async () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const jobId = jobObject.id;
-  const url = `${API_URL}/jobs/${jobId}/bookmark`;
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Authorization': 'Bearer ' + user.accessToken,
-      'Content-Type': 'application/json'
+  const url = `${API_URL}/jobs/bookmark/${jobId}`;
+  
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + user.accessToken,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      console.log("Bookmark status toggled successfully");
+    } else if (response.status === 401) {
+      localStorage.removeItem("user");
+      navigate('/login');
+    } else {
+      console.error("Error:", response.statusText);
     }
-  });
-  if (response.ok) {
-    console.log('Bookmark toggled successfully');
-  } else if (response.status === 401) {
-    navigate('/login');
-  } else {
-    console.error('Failed to toggle bookmark');
+  } catch (error) {
+    console.error("Error:", error);
   }
 };
   
