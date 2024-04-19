@@ -1,12 +1,12 @@
 import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import animalAvatarSelector from "./functions/animalAvatarSelector";
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
@@ -18,6 +18,15 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
   const open = Boolean(anchor);
   const identification = open ? 'simple-popper' : undefined;
 
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  let bookmarkChecker = false;
+  for(let i = 0; i < jobObject.usersWhoBookmarked.length; i++){
+    if (jobObject.usersWhoBookmarked[i].id === user.id){bookmarkChecker = true;}
+  }
+
+  const [isBookmarked, setIsBookmarked] = useState(bookmarkChecker);
+
 /* const handleBookmarkClick = (event) => {
   setAnchor(anchor ? null : event.currentTarget);
   setTimeout(function() { 
@@ -26,7 +35,9 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 
 }; */
 
-const handleBookmarkClick = async () => {
+
+
+const handleBookmarkClick = async (event) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const jobId = jobObject.id;
   const url = `${API_URL}/jobs/bookmark/${jobId}`;
@@ -41,7 +52,15 @@ const handleBookmarkClick = async () => {
     });
 
     if (response.ok) {
-      console.log("Bookmark status toggled successfully");
+
+      if(!isBookmarked){
+        setAnchor(anchor ? null : event.currentTarget);
+        setTimeout(function() { 
+        setAnchor(anchor ? null : event.currentTarget);
+        }, 2000); 
+        setIsBookmarked(!isBookmarked);
+        
+      }
     } else if (response.status === 401) {
       localStorage.removeItem("user");
       navigate('/login');
@@ -117,7 +136,7 @@ const handleBookmarkClick = async () => {
             {bookmarkEnabled &&
             <div>
                 <IconButton onClick={handleBookmarkClick}>
-                  <BookmarkAddIcon/>
+                {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddOutlinedIcon />}
                 </IconButton>
                 <BasePopup id={identification} placement="top" open={open} anchor={anchor}>
                 <PopupBody>Job Bookmarked!</PopupBody></BasePopup>
