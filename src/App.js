@@ -75,6 +75,11 @@ const App = () => {
                 Home
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to={"/jobs"} className="nav-link">
+                Fetch a Job
+              </Link>
+            </li>
           
                            
             {showModeratorBoard && (
