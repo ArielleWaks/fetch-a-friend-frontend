@@ -5,23 +5,30 @@
   "proxy": "http://localhost:8080",
   "dependencies": {
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.14",
-    "@mui/material": "^5.15.14",
-    "@mui/x-date-pickers": "^7.0.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.26.1",
-    "bootstrap": "^4.6.0",
+    "@emotion/styled": "^11.11.5",
+    "@material/button": "^14.0.0",
+    "@mui/icons-material": "^5.15.15",
+    "@mui/x-date-pickers": "^7.2.0",
+    "@react-google-maps/api": "^2.19.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@vis.gl/react-google-maps": "^0.8.0",
+    "axios": "^1.6.8",
+    "bootstrap": "^5.3.3",
     "dayjs": "^1.11.10",
-    "mdb-react-ui-kit": "^7.2.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-router-dom": "^6.2.2",
-    "react-scripts": "4.0.3",
+    "dotenv": "^16.4.5",
+    "mdb-react-ui-kit": "^8.0.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "5.0.1",
+    "react-stomp": "^5.1.0",
     "react-validation": "^3.0.7",
-    "validator": "^13.11.0"
+    "use-places-autocomplete": "^4.0.1",
+    "validator": "^13.11.0",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
@@ -30,7 +37,10 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -39,6 +49,9 @@
       "not op_mini all"
     ],
     "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
       ">0.2%",
       "not dead",
       "not op_mini all"
