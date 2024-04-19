@@ -6,6 +6,7 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import animalAvatarSelector from "./functions/animalAvatarSelector";
 
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
@@ -87,19 +88,15 @@ const handleBookmarkClick = async () => {
     }
   }
 
-  const animalIcon = (jobObject) =>{
-    if (jobObject.chosenAnimalType === "Dog"){return "/favavatar.jpeg"}
-    else if(jobObject.chosenAnimalType === "Cat"){return "/Cat-icon_30345.png"}
-    else if(jobObject.chosenAnimalType === "Fish"){return "/fish_icon.png"}
-    else if(jobObject.chosenAnimalType === "Bird"){return "/bird_icon.png"}
-    else if(jobObject.chosenAnimalType === "Lizard"){return "/lizard_icon.png"}
-  }
+
+  //This function selects what the avatar is based on the chosenAnimalType string in the Job.
+  const animalIcon = animalAvatarSelector(jobObject);
 
   return (
     <Card variant="outlined" >
       <CardHeader
         avatar={
-          <Avatar src={animalIcon(jobObject)}/>
+          <Avatar src={animalIcon}/>
         }
         title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
