@@ -50,7 +50,7 @@ export default function LoggedInDropdown({ logOut }) {
         <MenuItem onClick={handleClose}><Link to={"/profile"} className="nav-link">My Profile</Link></MenuItem>
         <MenuItem onClick={handleClose}><Link to={"/jobs/mysitting"} className='nav-link'>Manage My Jobs</Link></MenuItem>
         <MenuItem onClick={handleClose}>Bookmarked Jobs</MenuItem>
-        <MenuItem onClick={handleLogOut}>LogOut</MenuItem>
+        <MenuItem onClick={handleLogOut} style={{color: 'red'}}>LogOut</MenuItem>
       </Menu>
     </div>
   );

@@ -37,7 +37,7 @@ export default function FetchAJobDropdown() {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}><Link to={"/jobs"} className="nav-link">Browse All Listings</Link></MenuItem>
-        <MenuItem onClick={handleClose}><Link to={"/jobs"} className='nav-link'>View Jobs Map</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to={"/map-search"} className='nav-link'>View Jobs Map</Link></MenuItem>
       </Menu>
     </div>
   );
