@@ -21,10 +21,12 @@ import MyJobsSitting from "./components/MyJobsSitting";
 import UpdateJob from "./components/UpdateJob";
 import TestApp from "./components/TestMapComponent";
 import MapSearch from "./components/MapSearchComponent";
+import LoggedInDropdown from "./components/LoggedInDropdown";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ChatRoom from "./components/ChatRoomComponent";
+import FetchAJobDropdown from "./components/FetchAJobDropdown";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -70,16 +72,6 @@ const App = () => {
             Fetch a Friend
           </Link>
           <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/jobs"} className="nav-link">
-                Fetch a Job
-              </Link>
-            </li>
           
                            
             {showModeratorBoard && (
@@ -112,16 +104,12 @@ const App = () => {
           </div>
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
+            <div className="navbar-nav ml-auto" align="right">
               <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
+                <FetchAJobDropdown />
               </li>
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={logOut}>
-                  LogOut
-                </a>
+                <LoggedInDropdown logOut={logOut} />
               </li>
             </div>
           ) : (
