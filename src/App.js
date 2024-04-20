@@ -67,68 +67,59 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            Fetch a Friend
-          </Link>
-          <div className="navbar-nav mr-auto">
-          
-                           
-            {showModeratorBoard && (
-              <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
-            )}
-
-            {showJobBoard && (
-              <li className="nav-item">
-                <Link to={"/jobs"} className="nav-link">
-                   Jobs
-                </Link>
-              </li>
-            )}
-
-            
-
-
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-          </div>
-
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div className="container-fluid">
+      <Link to={"/"} className="navbar-brand">
+        Fetch a Friend
+      </Link>
+      <div className="collapse navbar-collapse justify-content-end">
+        <ul className="navbar-nav">
+          {showModeratorBoard && (
+            <li className="nav-item">
+              <Link to={"/mod"} className="nav-link">
+                Moderator Board
+              </Link>
+            </li>
+          )}
+          {showJobBoard && (
+            <li className="nav-item">
+              <Link to={"/jobs"} className="nav-link">
+                Jobs
+              </Link>
+            </li>
+          )}
+          {showAdminBoard && (
+            <li className="nav-item">
+              <Link to={"/admin"} className="nav-link">
+                Admin Board
+              </Link>
+            </li>
+          )}
           {currentUser ? (
-            <div className="navbar-nav ml-auto" align="right">
+            <>
               <li className="nav-item">
                 <FetchAJobDropdown />
               </li>
               <li className="nav-item">
-                <LoggedInDropdown logOut={logOut} />
+              <LoggedInDropdown logOut={logOut} />
               </li>
-            </div>
+            </>
           ) : (
-            <div className="navbar-nav ml-auto">
+            <>
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
-                Login
+                  Login
                 </Link>
               </li>
-
               <li className="nav-item">
                 <Link to={"/register"} className="nav-link">
                   Sign Up
                 </Link>
               </li>
-            </div>
+            </>
           )}
-        </nav>
-
+        </ul>
+        </div></div></nav>
         <div className="container mt-3">
           <Routes>
             <Route path="/" element={<Home/>} />
