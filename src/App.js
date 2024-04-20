@@ -27,6 +27,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ChatRoom from "./components/ChatRoomComponent";
 import FetchAJobDropdown from "./components/FetchAJobDropdown";
+import BookmarkedJobs from "./components/BookmarkedJobs";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -137,6 +138,7 @@ const App = () => {
             <Route path="/jobs" element={<BrowseJobs/>} />
             <Route path="/map-search" element={<TestApp/>} />
             <Route path="/chatroom" element={<ChatRoom />} />
+            <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
           </Routes>
         </div>
 

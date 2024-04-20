@@ -47,10 +47,16 @@ export default function LoggedInDropdown({ logOut }) {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleClose}><Link to={"/profile"} className="nav-link">My Profile</Link></MenuItem>
-        <MenuItem onClick={handleClose}><Link to={"/jobs/mysitting"} className='nav-link'>Manage My Jobs</Link></MenuItem>
-        <MenuItem onClick={handleClose}>Bookmarked Jobs</MenuItem>
-        <MenuItem onClick={handleLogOut} style={{color: 'red'}}>LogOut</MenuItem>
+        <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>My Profile</MenuItem>
+        </Link>
+        <Link to="/jobs/mysitting" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>Manage My Jobs</MenuItem>
+        </Link>
+        <Link to="/jobs/mybookmarks" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>My Bookmarked Jobs</MenuItem>
+        </Link>
+        <MenuItem onClick={handleLogOut} style={{ color: 'red' }}>LogOut</MenuItem>
       </Menu>
     </div>
   );
