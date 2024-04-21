@@ -177,8 +177,8 @@ const handleBookmarkClick = async () => {
                 size="small" variant="contained"
                 disabled={user.id === jobObject.user.id}
                 onClick={(e) => handleAcceptJob(jobObject.id, e)} >
-              Accept Job
-            </Button>
+                Accept Job
+              </Button>
             </span>
           </Tooltip>
         }

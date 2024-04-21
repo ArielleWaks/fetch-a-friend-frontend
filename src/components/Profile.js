@@ -18,6 +18,7 @@ import {
   MDBProgressBar,
   MDBRow
 } from 'mdb-react-ui-kit';
+import BadgeCard from "./BadgeCard";
 
 
 
@@ -71,8 +72,9 @@ const Profile = () => {
   };
 
   return (
-
+    
     <section style={{ backgroundColor: '#eee' }}>
+      <BadgeCard></BadgeCard>
       <MDBContainer className="py-5">
         <MDBRow>
           <MDBCol>
