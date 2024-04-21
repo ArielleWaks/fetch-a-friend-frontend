@@ -1,51 +1,35 @@
 import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { styled } from '@mui/system';
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+import animalAvatarSelector from "./functions/animalAvatarSelector";
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import bookmarkUpdate from "./functions/bookmarkUpdate";
 
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
 
   const API_URL = "http://localhost:3000/api";
 
-  //Bookmark confirmation popup stuff
-  const [anchor, setAnchor] = React.useState(null);
-  const open = Boolean(anchor);
-  const identification = open ? 'simple-popper' : undefined;
-
-/* const handleBookmarkClick = (event) => {
-  setAnchor(anchor ? null : event.currentTarget);
-  setTimeout(function() { 
-    setAnchor(anchor ? null : event.currentTarget);
-  }, 2000); 
-
-}; */
-
-const handleBookmarkClick = async () => {
+  //Checks to see if a user has a job bookmarked or not.
   const user = JSON.parse(localStorage.getItem('user'));
-  const jobId = jobObject.id;
-  const url = `${API_URL}/jobs/${jobId}/bookmark`;
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Authorization': 'Bearer ' + user.accessToken,
-      'Content-Type': 'application/json'
-    }
-  });
-  if (response.ok) {
-    console.log('Bookmark toggled successfully');
-  } else if (response.status === 401) {
-    navigate('/login');
-  } else {
-    console.error('Failed to toggle bookmark');
+  let bookmarkChecker = false;
+  for(let i = 0; i < jobObject.usersWhoBookmarked.length; i++){
+    if (jobObject.usersWhoBookmarked[i].id === user.id){bookmarkChecker = true;}
   }
+  const [isBookmarked, setIsBookmarked] = useState(bookmarkChecker);
+
+
+  const navigate = useNavigate();
+
+
+//Bookmarks or un-bookmarks a job, then swaps the bookmarking icon.
+const handleBookmarkClick = () => {
+  bookmarkUpdate(jobObject, API_URL, navigate);
+  setIsBookmarked(!isBookmarked);
 };
   
-  const navigate = useNavigate();
 
   const handleAcceptJob = (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -87,19 +71,15 @@ const handleBookmarkClick = async () => {
     }
   }
 
-  const animalIcon = (jobObject) =>{
-    if (jobObject.chosenAnimalType === "Dog"){return "/favavatar.jpeg"}
-    else if(jobObject.chosenAnimalType === "Cat"){return "/Cat-icon_30345.png"}
-    else if(jobObject.chosenAnimalType === "Fish"){return "/fish_icon.png"}
-    else if(jobObject.chosenAnimalType === "Bird"){return "/bird_icon.png"}
-    else if(jobObject.chosenAnimalType === "Lizard"){return "/lizard_icon.png"}
-  }
+
+  //This function selects what the avatar is based on the chosenAnimalType string in the Job.
+  const animalIcon = animalAvatarSelector(jobObject);
 
   return (
     <Card variant="outlined" >
       <CardHeader
         avatar={
-          <Avatar src={animalIcon(jobObject)}/>
+          <Avatar src={animalIcon}/>
         }
         title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
         subheader={jobObject.zipCode}
@@ -113,10 +93,8 @@ const handleBookmarkClick = async () => {
             {bookmarkEnabled &&
             <div>
                 <IconButton onClick={handleBookmarkClick}>
-                  <BookmarkAddIcon/>
+                {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddOutlinedIcon />}
                 </IconButton>
-                <BasePopup id={identification} placement="top" open={open} anchor={anchor}>
-                <PopupBody>Job Bookmarked!</PopupBody></BasePopup>
               </div>
             }
           </React.Fragment>
@@ -166,37 +144,3 @@ const handleBookmarkClick = async () => {
     </Card>
   )
 }
-
-
-const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
-};
-
-const PopupBody = styled('div')(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  box-shadow: ${
-    theme.palette.mode === 'dark'
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  z-index: 1;
-`,
-);
