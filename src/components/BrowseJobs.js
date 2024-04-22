@@ -94,13 +94,15 @@ export default function BrowseJobs () {
   //Function for when submit button is pressed
   const processSearch = function(){
     let tempJobArray = [];
-    console.log(jobData);
 
-    for (let i = 0; i < selectedAnimals.length; i++){
-      const selectedLabel = selectedAnimals[i];
-      const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
-      tempJobArray.push(...filteredJobs);}
-
+    if (selectedAnimals.length > 0){
+      for (let i = 0; i < selectedAnimals.length; i++){
+        const selectedLabel = selectedAnimals[i];
+        const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
+        tempJobArray.push(...filteredJobs);}
+    } else {
+      tempJobArray = jobData;
+    }
       if (selectedZipCode){tempJobArray = tempJobArray.filter(job => job.zipCode === selectedZipCode);}
 
     setJobArray(tempJobArray);

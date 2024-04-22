@@ -19,10 +19,15 @@ import CreateJob from "./components/CreateJob";
 import MyJobs from "./components/MyJobs";
 import MyJobsSitting from "./components/MyJobsSitting";
 import UpdateJob from "./components/UpdateJob";
-
+import TestApp from "./components/TestMapComponent";
+import MapSearch from "./components/MapSearchComponent";
+import LoggedInDropdown from "./components/LoggedInDropdown";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import ChatRoom from "./components/ChatRoomComponent";
+import FetchAJobDropdown from "./components/FetchAJobDropdown";
+import BookmarkedJobs from "./components/BookmarkedJobs";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -63,82 +68,59 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            Fetch a Friend
-          </Link>
-          <div className="navbar-nav mr-auto">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div className="container-fluid">
+      <Link to={"/"} className="navbar-brand">
+        Fetch a Friend
+      </Link>
+      <div className="collapse navbar-collapse justify-content-end">
+        <ul className="navbar-nav">
+          {showModeratorBoard && (
             <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
+              <Link to={"/mod"} className="nav-link">
+                Moderator Board
               </Link>
             </li>
+          )}
+          {showJobBoard && (
             <li className="nav-item">
               <Link to={"/jobs"} className="nav-link">
-                Fetch a Job
+                Jobs
               </Link>
             </li>
-          
-                           
-            {showModeratorBoard && (
-              <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
-            )}
-
-            {showJobBoard && (
-              <li className="nav-item">
-                <Link to={"/jobs"} className="nav-link">
-                   Jobs
-                </Link>
-              </li>
-            )}
-
-            
-
-
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-          </div>
-
+          )}
+          {showAdminBoard && (
+            <li className="nav-item">
+              <Link to={"/admin"} className="nav-link">
+                Admin Board
+              </Link>
+            </li>
+          )}
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
+            <>
               <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
+                <FetchAJobDropdown />
               </li>
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={logOut}>
-                  LogOut
-                </a>
+              <LoggedInDropdown logOut={logOut} />
               </li>
-            </div>
+            </>
           ) : (
-            <div className="navbar-nav ml-auto">
+            <>
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
-                Login
+                  Login
                 </Link>
               </li>
-
               <li className="nav-item">
                 <Link to={"/register"} className="nav-link">
                   Sign Up
                 </Link>
               </li>
-            </div>
+            </>
           )}
-        </nav>
-
+        </ul>
+        </div></div></nav>
         <div className="container mt-3">
           <Routes>
             <Route path="/" element={<Home/>} />
@@ -154,6 +136,9 @@ const App = () => {
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
             <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
             <Route path="/jobs" element={<BrowseJobs/>} />
+            <Route path="/map-search" element={<TestApp/>} />
+            <Route path="/chatroom" element={<ChatRoom />} />
+            <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
           </Routes>
         </div>
 
