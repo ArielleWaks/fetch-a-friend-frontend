@@ -7,7 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 const API_URL = "http://localhost:3000/api";
 
 export default function MyJobs () {
-  const [jobArray, setJobArray] = useState([]);
+  const [jobArray, setJobArray] = useState(null);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -40,19 +40,19 @@ export default function MyJobs () {
   
   return (
     <Container>
-      <Typography variant="h3">
+      <Typography variant="h3" gutterBottom={true}>
         My Jobs
       </Typography>
-      {jobArray === 0 &&
+      {jobArray && jobArray.length === 0 &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
           <Typography variant="subtitle1" >
-            If you need a pet sitter, fill out
-            <Tooltip title="Create Job"><Link to="../jobs/add"> this form </Link></Tooltip>
-            to let local pet sitters know!
+            If you need a pet sitter, fill out&nbsp;
+            <Tooltip title="Create Job"><Link to="../jobs/add">this form</Link></Tooltip>
+            &nbsp;to let local pet sitters know!
           </Typography>
         </Box>
       }
-      {jobArray.map((field, id) => {
+      {jobArray && jobArray.map((field, id) => {
         return (
           <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} editEnabled={true} acceptEnabled={false} key={id} />
         )

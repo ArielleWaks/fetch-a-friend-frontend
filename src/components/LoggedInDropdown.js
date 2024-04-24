@@ -53,8 +53,11 @@ export default function LoggedInDropdown({ logOut }) {
         <Link to="/jobs/add" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>List a Job</MenuItem>
         </Link>
-        <Link to="/jobs/mysitting" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/jobs/myjobs" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>Manage My Jobs</MenuItem>
+        </Link>
+        <Link to="/jobs/mysitting" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>View My Pet Sitting Gigs</MenuItem>
         </Link>
         <Link to="/jobs/mybookmarks" style={{ textDecoration: 'none', color: 'inherit' }}>
           <MenuItem onClick={handleClose}>My Bookmarked Jobs</MenuItem>

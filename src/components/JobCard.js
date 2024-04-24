@@ -30,10 +30,10 @@ const handleBookmarkClick = () => {
 };
   
 
-  const handleAcceptJob = (id, _e) => {
+  const handleAcceptJob = async (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-      const response = fetch(API_URL + '/jobs/sitter/' + id, {
+      const response = await fetch(API_URL + '/jobs/sitter/' + id, {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + user.accessToken,
@@ -83,7 +83,9 @@ const handleBookmarkClick = () => {
         subheader={jobObject.zipCode}
         action={
           <React.Fragment>
-            {deleteEnabled && user &&
+            {deleteEnabled &&
+              (jobObject.jobStatus === "STATUS_OPEN" || jobObject.jobStatus === "STATUS_CLOSED") &&
+              user &&
               <Tooltip title="Delete">
                 <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
                   <DeleteIcon/>

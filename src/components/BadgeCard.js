@@ -8,6 +8,7 @@ import {
   Tooltip,
   Badge, Stack
 } from "@mui/material";
+import animalAvatarSelector from "./functions/animalAvatarSelector";
 
 const API_URL = "http://localhost:3000/api";
 
@@ -15,7 +16,7 @@ export default function BadgeCard () {
   const [badgeArray, setBadgeArray] = useState([]);
   const navigate = useNavigate();
   
-  const avatarPicker = (badgeType, jobNumber, pet) => {
+  const avatarPicker = (badgeType, jobNumber, badge) => {
     if(badgeType === "JOB") {
       if(jobNumber === 1) {
         return "/badge_ribbon_with_paw.png";
@@ -24,11 +25,7 @@ export default function BadgeCard () {
       }
     }
     if(badgeType === "SPECIALTY") {
-      if(pet === "DOG") {
-        return "/badge_dog.png";
-      } else if (pet === "CAT") {
-        return "/badge_cat.png";
-      }
+      return animalAvatarSelector(badge);
     }
     return "/badge_house_paw.png";
   }
@@ -57,16 +54,14 @@ export default function BadgeCard () {
   }, [navigate]);
 
   return (
-    <Card variant="outlined" >
-      <CardHeader
-        title="My Achievements"
-      />
+    <Card variant="outlined" class="card">
       <CardContent>
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
           spacing={2}
+          useFlexGap flexWrap="wrap"
         >
           {badgeArray.map((badge) => (
             <Tooltip title={badge.name} >
@@ -76,9 +71,9 @@ export default function BadgeCard () {
                 badgeContent={badge.badgeType === "JOB" ? badge.numberOfJobs : 0}
               >
                 <Avatar
-                  src={avatarPicker(badge.badgeType, badge.numberOfJobs, badge.petType)}
-                  sx={{ width: 56, height: 56 }}
-                  style={{ border: '0.1px solid lightgray' }}
+                  src={avatarPicker(badge.badgeType, badge.numberOfJobs, badge)}
+                  sx={{ width: 70, height: 70, p: 0.5 }}
+                  // style={{ border: '0.1px solid lightgray' }}
                   key={badge.id}
                 />
               </Badge>
@@ -86,6 +81,10 @@ export default function BadgeCard () {
           ))}
         </Stack>
       </CardContent>
+      <CardHeader
+        subheader="My Achievements"
+        sx={{textAlign: 'center'}}
+      />
     </Card>
   )
 
