@@ -14,6 +14,20 @@ export default function BrowseJobs () {
   const [user, setUser] = useState()
   const [selectedZipCode, setSelectedZipCode] = useState(0);
   const [hasSearchedChanged, setHasSearchChanged] = useState(false);
+  const petTypes = {
+    Dog: 'DOG',
+    Cat: 'CAT',
+    Fish: 'FISH',
+    Bird: 'BIRD',
+    Hamster: 'HAMSTER',
+    Guineapig: 'GUINEAPIG',
+    Rabbit: 'RABBIT',
+    Lizard: 'LIZARD',
+    Turtle: 'TURTLE',
+    Ferret: 'FERRET',
+    Mouse: 'MOUSE',
+    Chinchilla: 'CHINCHILLA'
+  }
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -53,14 +67,7 @@ export default function BrowseJobs () {
     }};
 
   zipCodeOptions.sort((a,b) => a - b);
-
-
-  //Creates a list of possible animal types based on the jobData
-  const animalOptions = [];
-
-  for (let i = 0; i < jobData.length; i++){
-    if ((!animalOptions.includes(jobData[i].chosenAnimalType))){
-    animalOptions.push(jobData[i].chosenAnimalType);}};
+  
 
   //User input handler functions
   const handleAnimalChange = (event) => {
@@ -98,7 +105,7 @@ export default function BrowseJobs () {
     if (selectedAnimals.length > 0){
       for (let i = 0; i < selectedAnimals.length; i++){
         const selectedLabel = selectedAnimals[i];
-        const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
+        const filteredJobs = jobData.filter(job => job.petType === selectedLabel);
         tempJobArray.push(...filteredJobs);}
     } else {
       tempJobArray = jobData;
@@ -136,10 +143,10 @@ export default function BrowseJobs () {
           onChange={handleAnimalChange}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}>
-          {animalOptions.map((animal) => (
-            <MenuItem key={animal} value={animal}>
-              <Checkbox checked={selectedAnimals.includes(animal)} />
-              <ListItemText primary={animal} />
+          {Object.keys(petTypes).sort().map((key) => (
+            <MenuItem key={key} value={petTypes[key]}>
+              <Checkbox checked={selectedAnimals.includes(petTypes[key])} />
+              <ListItemText primary={key} />
             </MenuItem>
           ))}
         </Select>

@@ -70,16 +70,16 @@ const handleBookmarkClick = () => {
   }
 
 
-  //This function selects what the avatar is based on the chosenAnimalType string in the Job.
+  //This function selects what the avatar is based on the petType string in the Job.
   const animalIcon = animalAvatarSelector(jobObject);
 
   return (
-    <Card variant="outlined" >
+    <Card variant="outlined" sx={{ my: 2 }} >
       <CardHeader
         avatar={
           <Avatar src={animalIcon}/>
         }
-        title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
+        title={<Typography variant="body2">Looking for a {jobObject.petType.toLowerCase()} sitter</Typography>}
         subheader={jobObject.zipCode}
         action={
           <React.Fragment>
