@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Container, Grid } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Container,
+  Grid,
+  MenuItem,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import dayjs from "dayjs";
@@ -15,14 +21,33 @@ export default function CreateJob() {
     zipCode: '',
     payRate: '',
     totalHours: '',
-    description: ''
+    description: '',
+    petName: '',
+    petType: '',
+    petNumber: '',
   });
+  const petTypes = {
+    Dog: 'DOG',
+    Cat: 'CAT',
+    Fish: 'FISH',
+    Bird: 'BIRD',
+    Hamster: 'HAMSTER',
+    Guineapig: 'GUINEAPIG',
+    Rabbit: 'RABBIT',
+    Lizard: 'LIZARD',
+    Turtle: 'TURTLE',
+    Ferret: 'FERRET',
+    Mouse: 'MOUSE',
+    Chinchilla: 'CHINCHILLA'
+  }
   const navigate = useNavigate();
   
   const [errors, setErrors] = useState({
     zipCodeError: false,
     totalHoursError: false,
     payRateError: false,
+    petNumberError: false,
+    petTypeError: false,
   });
   
   const noErrors = () => Object.values(errors).every((value) => (!value));
@@ -65,6 +90,15 @@ export default function CreateJob() {
     setFormData({...formData, [name]: value});
   };
   
+  const handlePetChange = (e) => {
+    const {value} = e.target;
+    setErrors({
+      ...errors,
+      petTypeError: value === "None" || value === undefined || value === ""
+    });
+    setFormData({...formData, petType: value});
+  };
+  
   const handleStartDateChange = (e) => {
     setFormData({...formData, startDate: e});
   };
@@ -100,19 +134,7 @@ export default function CreateJob() {
                     zipCodeError: !regExZip.test(zipcode)
                   });
                   setFormData({...formData, zipCode: zipcode});
-                  // setEmptyFields(false);
                 }}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Animal Type"
-                variant="outlined"
-                fullWidth
-                name="animalType"
-                value={formData.description}
-                onChange={handleChange}
                 required
               />
             </Grid>
@@ -143,7 +165,6 @@ export default function CreateJob() {
                     totalHoursError: isNaN(Number(hours)) || hours <= 0
                   });
                   setFormData({...formData, totalHours: hours});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -164,7 +185,6 @@ export default function CreateJob() {
                     payRateError: isNaN(Number(pay)) || pay <= 0
                   });
                   setFormData({...formData, payRate: pay});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -187,6 +207,56 @@ export default function CreateJob() {
                 label="End Date"
                 minDate={formData.startDate}
                 disablePast
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Pet Name(s)"
+                variant="outlined"
+                fullWidth
+                name="petName"
+                value={formData.petName}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                value={formData.petType}
+                label="Pet Species"
+                fullWidth
+                required
+                error={errors.petTypeError}
+                helperText={errors.petTypeError ? 'Select Pet Species' : ''}
+                onChange={handlePetChange}
+                select // tell TextField to render select
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {Object.keys(petTypes).sort().map((key)=>
+                <MenuItem key={key} value={petTypes[key]}>{key}</MenuItem>
+                )}
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Number of Pets"
+                variant="outlined"
+                fullWidth
+                name="petNumber"
+                value={formData.petNumber}
+                error={errors.petNumberError}
+                helperText={errors.petNumberError ? 'Positive Whole Number of Pets' : ''}
+                onChange={(event) => {
+                  const pets = event.target.value;
+                  setErrors({
+                    ...errors,
+                    petNumberError: isNaN(Number(pets)) || pets <= 0 || !Number.isInteger(Number(pets))
+                  });
+                  setFormData({...formData, petNumber: pets});
+                }}
                 required
               />
             </Grid>

@@ -1,4 +1,4 @@
-import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, Typography, Button, CardActions, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,6 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 
   const navigate = useNavigate();
 
-
 //Bookmarks or un-bookmarks a job, then swaps the bookmarking icon.
 const handleBookmarkClick = () => {
   bookmarkUpdate(jobObject, API_URL, navigate);
@@ -31,10 +30,10 @@ const handleBookmarkClick = () => {
 };
   
 
-  const handleAcceptJob = (id, _e) => {
+  const handleAcceptJob = async (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-      const response = fetch(API_URL + '/jobs/sitter/' + id, {
+      const response = await fetch(API_URL + '/jobs/sitter/' + id, {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + user.accessToken,
@@ -50,9 +49,8 @@ const handleBookmarkClick = () => {
       console.log(error);
     }
   }
-
+  
   const handleDelete = (id, _e) => {
-    const user = JSON.parse(localStorage.getItem('user'));
     try {
       const response = fetch(API_URL + '/jobs/' + id, {
         method: 'DELETE',
@@ -72,23 +70,27 @@ const handleBookmarkClick = () => {
   }
 
 
-  //This function selects what the avatar is based on the chosenAnimalType string in the Job.
+  //This function selects what the avatar is based on the petType string in the Job.
   const animalIcon = animalAvatarSelector(jobObject);
 
   return (
-    <Card variant="outlined" >
+    <Card variant="outlined" sx={{ my: 2 }} >
       <CardHeader
         avatar={
           <Avatar src={animalIcon}/>
         }
-        title={<Typography variant="body2">Looking for a {jobObject.chosenAnimalType} sitter</Typography>}
+        title={<Typography variant="body2">Looking for a {jobObject.petType.toLowerCase()} sitter</Typography>}
         subheader={jobObject.zipCode}
         action={
           <React.Fragment>
             {deleteEnabled &&
-              <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
-                <DeleteIcon/>
-              </IconButton>
+              (jobObject.jobStatus === "STATUS_OPEN" || jobObject.jobStatus === "STATUS_CLOSED") &&
+              user &&
+              <Tooltip title="Delete">
+                <IconButton onClick={(e) => handleDelete(jobObject.id, e)}>
+                  <DeleteIcon/>
+                </IconButton>
+              </Tooltip>
             }
             {bookmarkEnabled &&
             <div>
@@ -117,12 +119,20 @@ const handleBookmarkClick = () => {
           <Grid item xs={6}>
             <Typography variant="body2">{"Hours: " + jobObject.totalHours}</Typography>
           </Grid>
-          { editEnabled &&
+          <Grid item xs={6}>
+            <Typography variant="body2">{"Pet Species: " + jobObject.petType}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2">{"Number of Pets: " + jobObject.petNumber}</Typography>
+          </Grid>
+          { editEnabled && user &&
             <Grid item xs={6}>
               <Typography variant="body2">{"Job Status:" + jobObject.jobStatus.replace("STATUS_", " ")}</Typography>
             </Grid>
           }
-          { Object.is(jobObject.jobStatus, "STATUS_CLAIMED") && editEnabled &&
+          { jobObject.jobStatus === "STATUS_CLAIMED" &&
+            editEnabled &&
+            user &&
             <Grid item xs={6}>
               <Typography variant="body2">{"Pet Sitter: " + jobObject.sitter.username }</Typography>
             </Grid>
@@ -130,15 +140,25 @@ const handleBookmarkClick = () => {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        { editEnabled && Object.is(jobObject.jobStatus, "STATUS_OPEN") &&
-          <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
-            Edit
-          </Button>
+        { editEnabled &&
+          jobObject.jobStatus === "STATUS_OPEN" &&
+          <Tooltip title="Edit">
+            <Button size="small" variant="outlined" onClick={() => navigate('/jobs/edit/' + jobObject.id)} >
+              Edit
+            </Button>
+          </Tooltip>
         }
-        { acceptEnabled &&
-          <Button size="small" variant="contained" onClick={(e) => handleAcceptJob(jobObject.id, e)} >
-            Accept Job
-          </Button>
+        { acceptEnabled && user &&
+          <Tooltip title={user.id === jobObject.user.id ? "You can't accept your own job" : "Accept Job"}>
+            <span>
+              <Button
+                size="small" variant="contained"
+                disabled={user.id === jobObject.user.id}
+                onClick={(e) => handleAcceptJob(jobObject.id, e)} >
+                Accept Job
+              </Button>
+            </span>
+          </Tooltip>
         }
       </CardActions>
     </Card>

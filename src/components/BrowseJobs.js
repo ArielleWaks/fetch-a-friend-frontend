@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Checkbox, Button, Select, MenuItem, FormControl, InputLabel,
-OutlinedInput, ListItemText, Autocomplete, TextField, Box} from '@mui/material';
 import { Link } from "react-router-dom";
+import { Container, Typography, Box, Checkbox, Button, Select, MenuItem, FormControl, InputLabel, OutlinedInput, ListItemText, Autocomplete, TextField } from '@mui/material';
 import JobCard from "./JobCard";
 import EventBus from "../common/EventBus";
-
 
 const API_URL = "http://localhost:3000/api";
 
@@ -16,13 +14,27 @@ export default function BrowseJobs () {
   const [user, setUser] = useState()
   const [selectedZipCode, setSelectedZipCode] = useState(0);
   const [hasSearchedChanged, setHasSearchChanged] = useState(false);
+  const petTypes = {
+    Dog: 'DOG',
+    Cat: 'CAT',
+    Fish: 'FISH',
+    Bird: 'BIRD',
+    Hamster: 'HAMSTER',
+    Guineapig: 'GUINEAPIG',
+    Rabbit: 'RABBIT',
+    Lizard: 'LIZARD',
+    Turtle: 'TURTLE',
+    Ferret: 'FERRET',
+    Mouse: 'MOUSE',
+    Chinchilla: 'CHINCHILLA'
+  }
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     setUser(user);
     async function fetchData() {
       try {
-        const response = await fetch(API_URL + '/jobs', {
+        const response = await fetch(API_URL + '/jobs/open', {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -55,14 +67,7 @@ export default function BrowseJobs () {
     }};
 
   zipCodeOptions.sort((a,b) => a - b);
-
-
-  //Creates a list of possible animal types based on the jobData
-  const animalOptions = [];
-
-  for (let i = 0; i < jobData.length; i++){
-    if ((!animalOptions.includes(jobData[i].chosenAnimalType))){
-    animalOptions.push(jobData[i].chosenAnimalType);}};
+  
 
   //User input handler functions
   const handleAnimalChange = (event) => {
@@ -100,7 +105,7 @@ export default function BrowseJobs () {
     if (selectedAnimals.length > 0){
       for (let i = 0; i < selectedAnimals.length; i++){
         const selectedLabel = selectedAnimals[i];
-        const filteredJobs = jobData.filter(job => job.chosenAnimalType === selectedLabel);
+        const filteredJobs = jobData.filter(job => job.petType === selectedLabel);
         tempJobArray.push(...filteredJobs);}
     } else {
       tempJobArray = jobData;
@@ -117,7 +122,7 @@ export default function BrowseJobs () {
       <Typography variant="h3" align="center">
         Browse Available Jobs
       </Typography>
-      {(Object.is(user, null)) &&
+      {user === null &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
           <Typography variant="subtitle1" >
             <Link to="../login">Login </Link>
@@ -138,10 +143,10 @@ export default function BrowseJobs () {
           onChange={handleAnimalChange}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}>
-          {animalOptions.map((animal) => (
-            <MenuItem key={animal} value={animal}>
-              <Checkbox checked={selectedAnimals.includes(animal)} />
-              <ListItemText primary={animal} />
+          {Object.keys(petTypes).sort().map((key) => (
+            <MenuItem key={key} value={petTypes[key]}>
+              <Checkbox checked={selectedAnimals.includes(petTypes[key])} />
+              <ListItemText primary={key} />
             </MenuItem>
           ))}
         </Select>
@@ -176,7 +181,7 @@ export default function BrowseJobs () {
                    deleteEnabled={false}
                    editEnabled={false}
                    bookmarkEnabled={true}
-                   acceptEnabled={Object.is(user, null) ? false : true}
+                   acceptEnabled={user !== null}
                    key={id}
           />
         )
