@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography } from '@mui/material';
-import JobCard from "./JobCard";
+import JobCard from "../components/JobCard";
 import EventBus from "../common/EventBus";
 import { Link } from "react-router-dom";
 

@@ -18,7 +18,7 @@ import {
   MDBProgressBar,
   MDBRow
 } from 'mdb-react-ui-kit';
-import BadgeCard from "./BadgeCard";
+import BadgeCard from "../components/BadgeCard";
 import { useNavigate } from "react-router-dom";
 
 

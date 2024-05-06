@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {Box, Container, Tooltip, Typography} from '@mui/material';
-import JobCard from "./JobCard";
+import JobCard from "../components/JobCard";
 
 import {Link, useNavigate} from "react-router-dom";
 
 const API_URL = "http://localhost:3000/api";
 
-export default function MyJobs () {
+export default function MyJobsSitting () {
   const [jobArray, setJobArray] = useState(null);
   const navigate = useNavigate();
   
@@ -18,7 +18,7 @@ export default function MyJobs () {
     async function fetchData() {
       const user = JSON.parse(localStorage.getItem('user'));
       try {
-        const response = await fetch(API_URL + '/jobs/myjobs', {
+        const response = await fetch(API_URL + '/jobs/mysitting', {
           headers: {
             'Authorization': 'Bearer ' + user.accessToken,
             'Content-Type': 'application/json'
@@ -41,20 +41,20 @@ export default function MyJobs () {
   return (
     <Container>
       <Typography variant="h3" gutterBottom={true}>
-        My Jobs
+        My Pet Sitting Gigs
       </Typography>
       {jobArray && jobArray.length === 0 &&
         <Box sx={{p: 1, border: '1px solid grey', borderRadius: 1 }} >
           <Typography variant="subtitle1" >
-            If you need a pet sitter, fill out&nbsp;
-            <Tooltip title="Create Job"><Link to="../jobs/add">this form</Link></Tooltip>
-            &nbsp;to let local pet sitters know!
+            To become a pet sitter, check out&nbsp;
+            <Tooltip title="Browse Open Jobs"><Link to="../jobs">open jobs</Link></Tooltip>
+            &nbsp;in your area!
           </Typography>
         </Box>
       }
       {jobArray && jobArray.map((field, id) => {
         return (
-          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={true} editEnabled={true} acceptEnabled={false} key={id} />
+          <JobCard jobObject={field} id={id} deleteCallback={deleteCallback} deleteEnabled={false} editEnabled={false} acceptEnabled={false} key={id} />
         )
       })}
     </Container>
