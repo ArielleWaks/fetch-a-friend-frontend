@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Typography, Box, Checkbox, Button, Select, MenuItem, FormControl, InputLabel, OutlinedInput, ListItemText, Autocomplete, TextField } from '@mui/material';
-import JobCard from "./JobCard";
+import JobCard from "../components/JobCard";
 import EventBus from "../common/EventBus";
 
 const API_URL = "http://localhost:3000/api";

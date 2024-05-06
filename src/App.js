@@ -5,29 +5,28 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import BoardAdmin from "./components/BoardAdmin";
-import BoardModerator from "./components/BoardModerator";
-import BoardUser from "./components/BoardUser";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
-import Register from "./components/Register";
+import BoardAdmin from "./pages/BoardAdmin";
+import BoardModerator from "./pages/BoardModerator";
+import BoardUser from "./pages/BoardUser";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 import EventBus from "./common/EventBus";
-import BrowseJobs from "./components/BrowseJobs";
-import CreateJob from "./components/CreateJob";
-import MyJobs from "./components/MyJobs";
-import MyJobsSitting from "./components/MyJobsSitting";
-import UpdateJob from "./components/UpdateJob";
+import BrowseJobs from "./pages/BrowseJobs";
+import CreateJob from "./pages/CreateJob";
+import MyJobs from "./pages/MyJobs";
+import MyJobsSitting from "./pages/MyJobsSitting";
+import UpdateJob from "./pages/UpdateJob";
 import TestApp from "./components/TestMapComponent";
-import MapSearch from "./components/MapSearchComponent";
 import LoggedInDropdown from "./components/LoggedInDropdown";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ChatRoom from "./components/ChatRoomComponent";
+import ChatRoom from "./pages/ChatRoomComponent";
 import FetchAJobDropdown from "./components/FetchAJobDropdown";
-import BookmarkedJobs from "./components/BookmarkedJobs";
+import BookmarkedJobs from "./pages/BookmarkedJobs";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
