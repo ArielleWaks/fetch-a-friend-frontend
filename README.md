@@ -1,7 +1,7 @@
 # Fetch a Friend
 
-Fetch a Friend is a market palace app that connects pet owners with pet sitters.
-This is the front end SPA responsible for hosting the UI.
+Fetch a Friend is a marketpalace app that connects pet owners with pet sitters.
+This is the frontend SPA responsible for hosting the UI.
 
 ## Installation
 
