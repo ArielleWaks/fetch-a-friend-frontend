@@ -5,10 +5,6 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import BoardAdmin from "./pages/BoardAdmin";
-import BoardModerator from "./pages/BoardModerator";
-import BoardUser from "./pages/BoardUser";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
@@ -88,13 +84,6 @@ const App = () => {
               </Link>
             </li>
           )}
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin Board
-              </Link>
-            </li>
-          )}
           {currentUser ? (
             <>
               <li className="nav-item">
@@ -122,14 +111,10 @@ const App = () => {
         </div></div></nav>
         <div className="container mt-3">
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/home" element={<Home/>} />
+            <Route path="/" element={<BrowseJobs/>} />
             <Route path="/login" element={<Login/>} />
             <Route path="/register" element={<Register/>} />
             <Route path="/profile" element={<Profile/>} />
-            <Route path="/user" element={<BoardUser/>} />
-            <Route path="/mod" element={<BoardModerator/>} />
-            <Route path="/admin" element={<BoardAdmin/>} />
             <Route path="/jobs/add" element={<CreateJob/>} />
             <Route path="/jobs/edit/:id" element={<UpdateJob/>} />
             <Route path="/jobs/myjobs" element={<MyJobs/>} />
