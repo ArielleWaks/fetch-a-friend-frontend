@@ -69,6 +69,7 @@ export default function BrowseJobs () {
     fetchData();
   }, []);
 
+  // list of zip codes from jobArray jobs for zip code filter
   const zipCodeOptions = [...new Set(jobArray.map(job => job.zipCode.toString()))];
   
   const handleAnimalChange = (event) => {
