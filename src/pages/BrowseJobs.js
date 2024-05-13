@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, Typography, Box, Checkbox, Button, Select, MenuItem, FormControl, InputLabel, OutlinedInput, ListItemText, Autocomplete, TextField } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Checkbox,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  ListItemText,
+  Autocomplete,
+  TextField,
+} from '@mui/material';
 import JobCard from "../components/JobCard";
 import EventBus from "../common/EventBus";
 
 const API_URL = "http://localhost:3000/api";
 
 export default function BrowseJobs () {
-  const [jobData, setJobData] = useState([]);
   const [jobArray, setJobArray] = useState([]);
   const [selectedSortingMethod, setSelectedSortingMethod] = useState([]);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
@@ -41,7 +53,6 @@ export default function BrowseJobs () {
         });
         const json = await response.json()
         setJobArray(json);
-        setJobData(json);
       } catch (error) {
         const errorMessage =
           (error.response &&
@@ -58,18 +69,9 @@ export default function BrowseJobs () {
     fetchData();
   }, []);
 
-  //Creates a list of possible zip codes based on the jobData
-  const zipCodeOptions = [];
+  // list of zip codes from jobArray jobs for zip code filter
+  const zipCodeOptions = [...new Set(jobArray.map(job => job.zipCode.toString()))];
   
-  for (let i = 0; i < jobData.length; i++){
-    if((!zipCodeOptions.includes(String(jobData[i].zipCode)))){
-      zipCodeOptions.push(String(jobData[i].zipCode));
-    }};
-
-  zipCodeOptions.sort((a,b) => a - b);
-  
-
-  //User input handler functions
   const handleAnimalChange = (event) => {
     const { value } = event.target;
     setSelectedAnimals(value);
@@ -82,7 +84,15 @@ export default function BrowseJobs () {
   };
 
   const handleZipCodeChange = (event, value) => { setSelectedZipCode(Number(value)); };
-
+  
+  const animalFilter = (job) => {
+    return selectedAnimals.length === 0 || selectedAnimals.includes(job.petType)
+  };
+  
+  const zipFilter = (job) => {
+    return selectedZipCode === 0 || selectedZipCode === job.zipCode
+  };
+  
   useEffect(() => {
     if(hasSearchedChanged){
     let sortedData = [...jobArray];
@@ -97,26 +107,6 @@ export default function BrowseJobs () {
   }
   }, [selectedSortingMethod, hasSearchedChanged, jobArray]);
 
-
-  //Function for when submit button is pressed
-  const processSearch = function(){
-    let tempJobArray = [];
-
-    if (selectedAnimals.length > 0){
-      for (let i = 0; i < selectedAnimals.length; i++){
-        const selectedLabel = selectedAnimals[i];
-        const filteredJobs = jobData.filter(job => job.petType === selectedLabel);
-        tempJobArray.push(...filteredJobs);}
-    } else {
-      tempJobArray = jobData;
-    }
-      if (selectedZipCode){tempJobArray = tempJobArray.filter(job => job.zipCode === selectedZipCode);}
-
-    setJobArray(tempJobArray);
-    setHasSearchChanged(true);
-  };
-
-  //html
   return (
     <Container>
       <Typography variant="h3" align="center">
@@ -151,41 +141,37 @@ export default function BrowseJobs () {
           ))}
         </Select>
       </FormControl>
-
       <FormControl sx={{m: 1, width: 200 }}>
         <Autocomplete id="zip-code-options" options={zipCodeOptions} sx={{ width: 300 }}
         onChange={handleZipCodeChange} renderInput={(params) => <TextField {...params} label="Zip Code" />}
         />
       </FormControl>
-
-      <br></br>
-
-      <Button variant="contained" align="center" onClick={processSearch}>Search!</Button>
-      <br></br>
-
+      <br/>
       <FormControl sx={{ m: 1, width: 200 }}>
-      <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
-      <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
-        <MenuItem value={"Default"}>Sort By...</MenuItem>
-        <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
-        <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
-        <MenuItem value={"hoursHighToLow"}>Hours Hi-Lo</MenuItem>
-        <MenuItem value={"hoursLowToHigh"}>Hours Lo-Hi</MenuItem>
-      </Select>
+        <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
+        <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
+          <MenuItem value={"Default"}>Sort By...</MenuItem>
+          <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
+          <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
+          <MenuItem value={"hoursHighToLow"}>Hours Hi-Lo</MenuItem>
+          <MenuItem value={"hoursLowToHigh"}>Hours Lo-Hi</MenuItem>
+        </Select>
       </FormControl>
-
-      {jobArray.map((field, id) => {
-        return (
-          <JobCard jobObject={field}
-                   id={id}
-                   deleteEnabled={false}
-                   editEnabled={false}
-                   bookmarkEnabled={true}
-                   acceptEnabled={user !== null}
-                   key={id}
-          />
-        )
-      })}
+      {jobArray.filter(animalFilter)
+        .filter(zipFilter)
+        .map((field, id) => {
+          return (
+            <JobCard jobObject={field}
+                     id={id}
+                     deleteEnabled={false}
+                     editEnabled={false}
+                     bookmarkEnabled={true}
+                     acceptEnabled={user !== null}
+                     key={id}
+            />
+          )
+        })
+      }
     </Container>
   );
 };
