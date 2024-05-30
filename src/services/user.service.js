@@ -8,7 +8,7 @@ const getPublicContent = () => {
 };
 
 const getImageContent = () => {
-  return axios.get("http://localhost:8080/file/upload");
+  return axios.get("/file/upload");
 };
 
 const UserService = {
