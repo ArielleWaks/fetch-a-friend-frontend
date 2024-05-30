@@ -10,7 +10,7 @@ import bookmarkUpdate from "./functions/bookmarkUpdate";
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
 
-  const API_URL = "http://localhost:3000/api";
+  const API_URL = "/api";
 
   //Checks to see if a user has a job bookmarked or not.
   const user = JSON.parse(localStorage.getItem('user'));

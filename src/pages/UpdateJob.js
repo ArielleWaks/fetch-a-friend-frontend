@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import dayjs from "dayjs";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "/api";
 
 export default function UpdateJob() {
   const [content, setContent] = useState('');

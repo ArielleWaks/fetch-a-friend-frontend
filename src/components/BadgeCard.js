@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import animalAvatarSelector from "./functions/animalAvatarSelector";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "/api";
 
 export default function BadgeCard () {
   const [badgeArray, setBadgeArray] = useState([]);

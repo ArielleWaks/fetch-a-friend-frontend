@@ -17,7 +17,7 @@ import {
 import JobCard from "../components/JobCard";
 import EventBus from "../common/EventBus";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "/api";
 
 export default function BrowseJobs () {
   const [jobArray, setJobArray] = useState([]);
