@@ -4,7 +4,7 @@ import JobCard from "../components/JobCard";
 
 import {Link, useNavigate} from "react-router-dom";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "/api";
 
 export default function MyJobsSitting () {
   const [jobArray, setJobArray] = useState(null);
