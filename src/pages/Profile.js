@@ -38,46 +38,46 @@ const Profile = () => {
     navigate('/chatroom');
   }
 
-  useEffect(() => {
-      FileService.getAllImages().then((response) => {
-          setImageList(response.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //     FileService.getAllImages().then((response) => {
+  //         setImageList(response.data);
+  //     });
+  // }, []);
 
-  const onFileChange = (event) => {
-    setFiles(event.target.files);
-  };
+  // const onFileChange = (event) => {
+  //   setFiles(event.target.files);
+  // };
+  //
+  // const onUploaderNameChange = (event) => {
+  //   setUploaderName(event.target.value);
+  // };
 
-  const onUploaderNameChange = (event) => {
-    setUploaderName(event.target.value);
-  };
+  // const onDescriptionChange = (event) => {
+  //   setDescription(event.target.value);
+  // };
 
-  const onDescriptionChange = (event) => { 
-    setDescription(event.target.value);
-  };
-
-  const onUpload = (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-
-    for (const key of Object.keys(files)) {
-      formData.append('files', files[key]);
-    }
-    formData.append('name', uploaderName);
-    formData.append('description', description); 
-
-    FileService.uploadImage(formData)
-      .then((response) => {
-        console.log(response.data);
-        setFileUploaded(true);
-        FileService.getAllImages().then((response) => {
-          setImageList(response.data);
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const onUpload = (event) => {
+  //   event.preventDefault();
+  //   const formData = new FormData();
+  //
+  //   for (const key of Object.keys(files)) {
+  //     formData.append('files', files[key]);
+  //   }
+  //   formData.append('name', uploaderName);
+  //   formData.append('description', description);
+  //
+  //   FileService.uploadImage(formData)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setFileUploaded(true);
+  //       FileService.getAllImages().then((response) => {
+  //         setImageList(response.data);
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     
@@ -193,48 +193,48 @@ const Profile = () => {
             </MDBCard>
 
             <MDBRow>
-              <MDBCol md="6">
-                <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBCardText className="mb-4"><span
-                      className="text-primary font-italic me-1">Upload Image</span></MDBCardText>
-                    <form onSubmit={onUpload}>
-                      <div>
-                        <label>Select a file:</label>
-                        <input type='file' name='file' onChange={onFileChange} multiple/>
-                      </div>
-                      
-                      <div className="mt-3">
-                        <label>Pet Name:</label>
-                        <input type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange}/>
-                      </div>
-                      
-                      <div className="mt-3">
-                        <label>About your pet:</label>
-                        <TextField
-                          multiline
-                          rows={4}
-                          
-                          fullWidth
-                          value={description}
-                          onChange={onDescriptionChange}
-                          InputProps={{
-                            sx: {
-                              '& fieldset': {
-                                borderColor: 'rgba(0, 0, 0, .8)',
-                              },
-                            },
-                          }}
-                        />
-                      </div>
-                      <br/>
-                      <Button type='submit' variant="contained" color="primary" disabled={!files || !uploaderName}>
-                        Upload
-                      </Button>
-                    </form>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
+              {/*<MDBCol md="6">*/}
+              {/*  <MDBCard className="mb-4 mb-md-0">*/}
+              {/*    <MDBCardBody>*/}
+              {/*      <MDBCardText className="mb-4"><span*/}
+              {/*        className="text-primary font-italic me-1">Upload Image</span></MDBCardText>*/}
+              {/*      <form onSubmit={onUpload}>*/}
+              {/*        <div>*/}
+              {/*          <label>Select a file:</label>*/}
+              {/*          <input type='file' name='file' onChange={onFileChange} multiple/>*/}
+              {/*        </div>*/}
+              {/*        */}
+              {/*        <div className="mt-3">*/}
+              {/*          <label>Pet Name:</label>*/}
+              {/*          <input type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange}/>*/}
+              {/*        </div>*/}
+              {/*        */}
+              {/*        <div className="mt-3">*/}
+              {/*          <label>About your pet:</label>*/}
+              {/*          <TextField*/}
+              {/*            multiline*/}
+              {/*            rows={4}*/}
+              {/*            */}
+              {/*            fullWidth*/}
+              {/*            value={description}*/}
+              {/*            onChange={onDescriptionChange}*/}
+              {/*            InputProps={{*/}
+              {/*              sx: {*/}
+              {/*                '& fieldset': {*/}
+              {/*                  borderColor: 'rgba(0, 0, 0, .8)',*/}
+              {/*                },*/}
+              {/*              },*/}
+              {/*            }}*/}
+              {/*          />*/}
+              {/*        </div>*/}
+              {/*        <br/>*/}
+              {/*        <Button type='submit' variant="contained" color="primary" disabled={!files || !uploaderName}>*/}
+              {/*          Upload*/}
+              {/*        </Button>*/}
+              {/*      </form>*/}
+              {/*    </MDBCardBody>*/}
+              {/*  </MDBCard>*/}
+              {/*</MDBCol>*/}
               
               <MDBCol md="6">
                 <MDBCard className="mb-4 mb-md-0">
