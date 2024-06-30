@@ -23,6 +23,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ChatRoom from "./pages/ChatRoomComponent";
 import FetchAJobDropdown from "./components/FetchAJobDropdown";
 import BookmarkedJobs from "./pages/BookmarkedJobs";
+import StickyFooter from "./components/StickyFooter";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -63,69 +64,73 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div className="container-fluid">
-      <Link to={"/"} className="navbar-brand">
-        Fetch a Friend
-      </Link>
-      <div className="collapse navbar-collapse justify-content-end">
-        <ul className="navbar-nav">
-          {showModeratorBoard && (
-            <li className="nav-item">
-              <Link to={"/mod"} className="nav-link">
-                Moderator Board
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div className="container-fluid">
+              <Link to={"/"} className="navbar-brand">
+                Fetch a Friend
               </Link>
-            </li>
-          )}
-          {showJobBoard && (
-            <li className="nav-item">
-              <Link to={"/jobs"} className="nav-link">
-                Jobs
-              </Link>
-            </li>
-          )}
-          {currentUser ? (
-            <>
-              <li className="nav-item">
-                <FetchAJobDropdown />
-              </li>
-              <li className="nav-item">
-              <LoggedInDropdown logOut={logOut} />
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-        </div></div></nav>
-        <div className="container mt-3">
-          <Routes>
-            <Route path="/" element={<BrowseJobs/>} />
-            <Route path="/login" element={<Login/>} />
-            <Route path="/register" element={<Register/>} />
-            <Route path="/profile" element={<Profile/>} />
-            <Route path="/jobs/add" element={<CreateJob/>} />
-            <Route path="/jobs/edit/:id" element={<UpdateJob/>} />
-            <Route path="/jobs/myjobs" element={<MyJobs/>} />
-            <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
-            <Route path="/jobs" element={<BrowseJobs/>} />
-            <Route path="/map-search" element={<TestApp/>} />
-            <Route path="/chatroom" element={<ChatRoom />} />
-            <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
-          </Routes>
-        </div>
-
+              <div className="collapse navbar-collapse justify-content-end">
+                <ul className="navbar-nav">
+                  {showModeratorBoard && (
+                    <li className="nav-item">
+                      <Link to={"/mod"} className="nav-link">
+                        Moderator Board
+                      </Link>
+                    </li>
+                  )}
+                  {showJobBoard && (
+                    <li className="nav-item">
+                      <Link to={"/jobs"} className="nav-link">
+                        Jobs
+                      </Link>
+                    </li>
+                  )}
+                  {currentUser ? (
+                    <>
+                      <li className="nav-item">
+                        <FetchAJobDropdown />
+                      </li>
+                      <li className="nav-item">
+                      <LoggedInDropdown logOut={logOut} />
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="nav-item">
+                        <Link to={"/login"} className="nav-link">
+                          Login
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link to={"/register"} className="nav-link">
+                          Sign Up
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <div className="container mt-3">
+            <Routes>
+              <Route path="/" element={<BrowseJobs/>} />
+              <Route path="/login" element={<Login/>} />
+              <Route path="/register" element={<Register/>} />
+              <Route path="/profile" element={<Profile/>} />
+              <Route path="/jobs/add" element={<CreateJob/>} />
+              <Route path="/jobs/edit/:id" element={<UpdateJob/>} />
+              <Route path="/jobs/myjobs" element={<MyJobs/>} />
+              <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
+              <Route path="/jobs" element={<BrowseJobs/>} />
+              <Route path="/map-search" element={<TestApp/>} />
+              <Route path="/chatroom" element={<ChatRoom />} />
+              <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
+            </Routes>
+          </div>
+          <div className="footer">
+            <StickyFooter />
+          </div>
       </div>
     </LocalizationProvider>
   );
