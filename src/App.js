@@ -128,10 +128,8 @@ const App = () => {
               <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
             </Routes>
           </div>
-          <div className="footer">
-            <StickyFooter />
-          </div>
       </div>
+      <StickyFooter />
     </LocalizationProvider>
   );
 };
