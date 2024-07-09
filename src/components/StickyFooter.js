@@ -26,7 +26,7 @@ function Copyright() {
 
 function ContactButtons() {
   return (
-    <Stack direction="row" spacing={4}>
+    <Stack direction="row" spacing={4} alignItems="center" justifyContent="center"   >
       <Tooltip title="GitHub" >
         <Link href="https://github.com/ArielleWaks">
           <GitHubIcon  />
@@ -80,7 +80,7 @@ export default function StickyFooter() {
                 : theme.palette.grey[800],
           }}
         >
-          <Container maxWidth="sm">
+          <Container maxWidth="sm" >
             <ContactButtons />
             <Copyright />
           </Container>
