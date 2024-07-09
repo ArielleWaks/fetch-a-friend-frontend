@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Stack from '@mui/material/Stack';
+import {Tooltip} from "@mui/material";
 
 
 function Copyright() {
@@ -26,12 +27,16 @@ function Copyright() {
 function ContactButtons() {
   return (
     <Stack direction="row" spacing={4}>
-      <Link href="https://github.com/ArielleWaks">
-        <GitHubIcon  />
-      </Link>
-      <Link href="https://www.linkedin.com/in/ariellewaks/" >
-        <LinkedInIcon/>
-      </Link>
+      <Tooltip title="GitHub" >
+        <Link href="https://github.com/ArielleWaks">
+          <GitHubIcon  />
+        </Link>
+      </Tooltip>
+      <Tooltip title="LinkedIn" >
+        <Link href="https://www.linkedin.com/in/ariellewaks/" >
+          <LinkedInIcon/>
+        </Link>
+      </Tooltip>
     </Stack>
   )
 }
