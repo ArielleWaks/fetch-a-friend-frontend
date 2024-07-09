@@ -5,10 +5,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import Stack from '@mui/material/Stack';
+
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://fetch.witheo.com">
         Fetch A Friend
@@ -17,6 +21,19 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function ContactButtons() {
+  return (
+    <Stack direction="row" spacing={4}>
+      <Link href="https://github.com/ArielleWaks">
+        <GitHubIcon  />
+      </Link>
+      <Link href="https://www.linkedin.com/in/ariellewaks/" >
+        <LinkedInIcon/>
+      </Link>
+    </Stack>
+  )
 }
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -59,9 +76,7 @@ export default function StickyFooter() {
           }}
         >
           <Container maxWidth="sm">
-            {/*<Typography variant="body1">*/}
-            {/*  My sticky footer can be found here.*/}
-            {/*</Typography>*/}
+            <ContactButtons />
             <Copyright />
           </Container>
         </Box>
