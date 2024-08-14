@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -24,6 +24,8 @@ import ChatRoom from "./pages/ChatRoomComponent";
 import FetchAJobDropdown from "./components/FetchAJobDropdown";
 import BookmarkedJobs from "./pages/BookmarkedJobs";
 import StickyFooter from "./components/StickyFooter";
+import NavBar from "./components/NavBar"
+import Container from '@mui/material/Container';
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -64,55 +66,58 @@ const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid">
-              <Link to={"/"} className="navbar-brand">
-                Fetch a Friend
-              </Link>
-              <div className="collapse navbar-collapse justify-content-end">
-                <ul className="navbar-nav">
-                  {showModeratorBoard && (
-                    <li className="nav-item">
-                      <Link to={"/mod"} className="nav-link">
-                        Moderator Board
-                      </Link>
-                    </li>
-                  )}
-                  {showJobBoard && (
-                    <li className="nav-item">
-                      <Link to={"/jobs"} className="nav-link">
-                        Jobs
-                      </Link>
-                    </li>
-                  )}
-                  {currentUser ? (
-                    <>
-                      <li className="nav-item">
-                        <FetchAJobDropdown />
-                      </li>
-                      <li className="nav-item">
-                      <LoggedInDropdown logOut={logOut} />
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li className="nav-item">
-                        <Link to={"/login"} className="nav-link">
-                          Login
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to={"/register"} className="nav-link">
-                          Sign Up
-                        </Link>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-            </div>
-          </nav>
-          <div className="container mt-3">
+        <NavBar currentUser={currentUser} logOut={logOut} />
+          {/*<nav className="navbar navbar-expand-lg navbar-dark bg-dark">*/}
+          {/*  <div className="container-fluid">*/}
+          {/*    <Link to={"/"} className="navbar-brand">*/}
+          {/*      Fetch a Friend*/}
+          {/*    </Link>*/}
+          {/*    <div className="collapse navbar-collapse justify-content-end">*/}
+          {/*      <ul className="navbar-nav">*/}
+          {/*        {showModeratorBoard && (*/}
+          {/*          <li className="nav-item">*/}
+          {/*            <Link to={"/mod"} className="nav-link">*/}
+          {/*              Moderator Board*/}
+          {/*            </Link>*/}
+          {/*          </li>*/}
+          {/*        )}*/}
+          {/*        {showJobBoard && (*/}
+          {/*          <li className="nav-item">*/}
+          {/*            <Link to={"/jobs"} className="nav-link">*/}
+          {/*              Jobs*/}
+          {/*            </Link>*/}
+          {/*          </li>*/}
+          {/*        )}*/}
+          {/*        {currentUser ? (*/}
+          {/*          <>*/}
+          {/*            <li className="nav-item">*/}
+          {/*              <FetchAJobDropdown />*/}
+          {/*            </li>*/}
+          {/*            <li className="nav-item">*/}
+          {/*            <LoggedInDropdown logOut={logOut} />*/}
+          {/*            </li>*/}
+          {/*          </>*/}
+          {/*        ) : (*/}
+          {/*          <>*/}
+          {/*            <li className="nav-item">*/}
+          {/*              <Link to={"/login"} className="nav-link">*/}
+          {/*                Login*/}
+          {/*              </Link>*/}
+          {/*            </li>*/}
+          {/*            <li className="nav-item">*/}
+          {/*              <Link to={"/register"} className="nav-link">*/}
+          {/*                Sign Up*/}
+          {/*              </Link>*/}
+          {/*            </li>*/}
+          {/*          </>*/}
+          {/*        )}*/}
+          {/*      </ul>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*</nav>*/}
+        <div >
+          <Container sx={{ pt: 5}} >
+          
             <Routes>
               <Route path="/" element={<BrowseJobs/>} />
               <Route path="/login" element={<Login/>} />
@@ -127,7 +132,8 @@ const App = () => {
               <Route path="/chatroom" element={<ChatRoom />} />
               <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
             </Routes>
-          </div>
+          </Container>
+        </div>
       </div>
       <StickyFooter />
     </LocalizationProvider>
