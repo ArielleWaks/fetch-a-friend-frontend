@@ -1,4 +1,3 @@
-// import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -15,13 +14,9 @@ import CreateJob from "./pages/CreateJob";
 import MyJobs from "./pages/MyJobs";
 import MyJobsSitting from "./pages/MyJobsSitting";
 import UpdateJob from "./pages/UpdateJob";
-import TestApp from "./components/TestMapComponent";
-import LoggedInDropdown from "./components/LoggedInDropdown";
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ChatRoom from "./pages/ChatRoomComponent";
-import FetchAJobDropdown from "./components/FetchAJobDropdown";
 import BookmarkedJobs from "./pages/BookmarkedJobs";
 import StickyFooter from "./components/StickyFooter";
 import NavBar from "./components/NavBar"
@@ -128,8 +123,6 @@ const App = () => {
               <Route path="/jobs/myjobs" element={<MyJobs/>} />
               <Route path="/jobs/mysitting" element={<MyJobsSitting/>} />
               <Route path="/jobs" element={<BrowseJobs/>} />
-              <Route path="/map-search" element={<TestApp/>} />
-              <Route path="/chatroom" element={<ChatRoom />} />
               <Route path="/jobs/mybookmarks" element={<BookmarkedJobs />} />
             </Routes>
           </Container>
