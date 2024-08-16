@@ -19,6 +19,7 @@ export default function FetchAJobDropdown() {
     <div>
       <Button
         id="fade-button"
+        color="inherit"
         aria-controls={open ? 'fade-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -36,8 +37,8 @@ export default function FetchAJobDropdown() {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleClose}><Link to={"/jobs"} className="nav-link">Browse All Listings</Link></MenuItem>
-        <MenuItem onClick={handleClose}><Link to={"/map-search"} className='nav-link'>View Jobs Map</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to={"/jobs"} >Browse All Listings</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to={"/map-search"} >View Jobs Map</Link></MenuItem>
       </Menu>
     </div>
   );

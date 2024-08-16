@@ -34,6 +34,7 @@ export default function LoggedInDropdown({ logOut }) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        color="inherit"
       >
         {username}
       </Button>

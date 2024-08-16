@@ -14,7 +14,6 @@ import {Tooltip} from "@mui/material";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
       <Link color="inherit" href="https://fetch.witheo.com">
         Fetch A Friend
       </Link>{' '}
