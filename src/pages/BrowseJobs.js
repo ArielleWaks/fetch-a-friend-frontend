@@ -13,6 +13,7 @@ import {
   ListItemText,
   Autocomplete,
   TextField,
+  Stack,
 } from '@mui/material';
 import JobCard from "../components/JobCard";
 import EventBus from "../common/EventBus";
@@ -122,41 +123,41 @@ export default function BrowseJobs () {
           </Typography>
         </Box>
       }
-
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="animal-type-filter">Animal</InputLabel>
-        <Select
-          labelId="animal-select-checkbox"
-          id="animal-select"
-          multiple
-          value={selectedAnimals}
-          onChange={handleAnimalChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}>
-          {Object.keys(petTypes).sort().map((key) => (
-            <MenuItem key={key} value={petTypes[key]}>
-              <Checkbox checked={selectedAnimals.includes(petTypes[key])} />
-              <ListItemText primary={key} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{m: 1, width: 200 }}>
-        <Autocomplete id="zip-code-options" options={zipCodeOptions} sx={{ width: 300 }}
-        onChange={handleZipCodeChange} renderInput={(params) => <TextField {...params} label="Zip Code" />}
-        />
-      </FormControl>
-      <br/>
-      <FormControl sx={{ m: 1, width: 200 }}>
-        <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
-        <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
-          <MenuItem value={"Default"}>Sort By...</MenuItem>
-          <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
-          <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
-          <MenuItem value={"hoursHighToLow"}>Hours Hi-Lo</MenuItem>
-          <MenuItem value={"hoursLowToHigh"}>Hours Lo-Hi</MenuItem>
-        </Select>
-      </FormControl>
+      <Stack direction="row" >
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="animal-type-filter">Animal</InputLabel>
+          <Select
+            labelId="animal-select-checkbox"
+            id="animal-select"
+            multiple
+            value={selectedAnimals}
+            onChange={handleAnimalChange}
+            input={<OutlinedInput label="Tag" />}
+            renderValue={(selected) => selected.join(', ')}>
+            {Object.keys(petTypes).sort().map((key) => (
+              <MenuItem key={key} value={petTypes[key]}>
+                <Checkbox checked={selectedAnimals.includes(petTypes[key])} />
+                <ListItemText primary={key} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{m: 1, width: 200 }}>
+          <Autocomplete id="zip-code-options" options={zipCodeOptions}
+                        onChange={handleZipCodeChange} renderInput={(params) => <TextField {...params} label="Zip Code" />}
+          />
+        </FormControl>
+        <FormControl sx={{ m: 1, width: 200 }}>
+          <InputLabel id="sort-jobs-by">Sort jobs by</InputLabel>
+          <Select defaultValue="Default" id="sorting-method" onChange={handleSortingChange}>
+            <MenuItem value={"Default"}>Recent</MenuItem>
+            <MenuItem value={"payHighToLow"}>Pay Rate Hi-Lo</MenuItem>
+            <MenuItem value={"payLowToHigh"}>Pay Rate Lo-Hi</MenuItem>
+            <MenuItem value={"hoursHighToLow"}>Hours Hi-Lo</MenuItem>
+            <MenuItem value={"hoursLowToHigh"}>Hours Lo-Hi</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
       {jobArray.filter(animalFilter)
         .filter(zipFilter)
         .map((field, id) => {
