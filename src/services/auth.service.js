@@ -1,9 +1,8 @@
-import axios from "axios";
-
-const API_URL = "/api/auth/";
+import api from "@/api/client";
+import { paths } from "@/api/paths";
 
 const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
+  return api.post(paths.auth.signup, {
     username,
     email,
     password,
@@ -11,18 +10,12 @@ const register = (username, email, password) => {
 };
 
 const login = (username, password) => {
-  return axios
-    .post(API_URL + "signin", {
-      username,
-      password,
-    })
-    .then((response) => {
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-
-      return response.data;
-    });
+  return api.post(paths.auth.signin, { username, password }).then((response) => {
+    if (response.data.accessToken) {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
+    return response.data;
+  });
 };
 
 const logout = () => {
@@ -40,4 +33,4 @@ const AuthService = {
   getCurrentUser,
 };
 
-export default AuthService; 
+export default AuthService;

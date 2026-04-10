@@ -1,9 +1,8 @@
-import axios from "axios";
-
-const API_URL = "/api/user/";
+import api from "@/api/client";
+import { paths } from "@/api/paths";
 
 const getPublicContent = () => {
-  return axios.get(API_URL + "all");
+  return api.get(paths.user.all);
 };
 
 const UserService = {
