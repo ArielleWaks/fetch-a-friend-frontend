@@ -39,5 +39,10 @@ export default defineConfig({
     setupFiles: path.resolve(srcDir, "setupTests.js"),
     css: true,
     include: ["src/**/*.{test,spec}.{js,jsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      reportsDirectory: path.resolve(__dirname, "coverage"),
+    },
   },
 });
