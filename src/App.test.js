@@ -11,6 +11,13 @@ jest.mock("./pages/BrowseJobs", () => {
   return MockBrowseJobs;
 });
 
+jest.mock("./pages/Profile", () => {
+  function MockProfile() {
+    return <div>Profile page</div>;
+  }
+  return MockProfile;
+});
+
 jest.mock("./services/auth.service", () => ({
   __esModule: true,
   default: {
@@ -46,5 +53,10 @@ describe("App", () => {
   it("renders register route", () => {
     renderApp(["/register"]);
     expect(screen.getByRole("heading", { name: /sign up/i })).toBeInTheDocument();
+  });
+
+  it("renders profile route", () => {
+    renderApp(["/profile"]);
+    expect(screen.getByText("Profile page")).toBeInTheDocument();
   });
 });

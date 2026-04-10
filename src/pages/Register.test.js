@@ -14,7 +14,10 @@ jest.mock("../services/auth.service", () => ({
 }));
 
 describe("Register", () => {
+  let user;
+
   beforeEach(() => {
+    user = userEvent.setup();
     AuthService.register.mockReset();
   });
 
@@ -28,12 +31,12 @@ describe("Register", () => {
 
   it("shows username length validation after submit", async () => {
     renderRegister();
-    await userEvent.type(screen.getByLabelText(/username/i), "ab");
-    await userEvent.type(screen.getByLabelText(/email/i), "a@b.co");
+    await user.type(screen.getByLabelText(/username/i), "ab");
+    await user.type(screen.getByLabelText(/email/i), "a@b.co");
     const [passwordInput, confirmInput] = screen.getAllByLabelText(/password/i);
-    await userEvent.type(passwordInput, "secret1");
-    await userEvent.type(confirmInput, "secret1");
-    await userEvent.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.type(passwordInput, "secret1");
+    await user.type(confirmInput, "secret1");
+    await user.click(screen.getByRole("button", { name: /sign up/i }));
     expect(
       await screen.findByText(/username must be between 3 and 20/i)
     ).toBeInTheDocument();
@@ -44,12 +47,12 @@ describe("Register", () => {
       data: { message: "Registration OK" },
     });
     renderRegister();
-    await userEvent.type(screen.getByLabelText(/username/i), "alice");
-    await userEvent.type(screen.getByLabelText(/email/i), "alice@example.com");
+    await user.type(screen.getByLabelText(/username/i), "alice");
+    await user.type(screen.getByLabelText(/email/i), "alice@example.com");
     const [pw1, pw2] = screen.getAllByLabelText(/password/i);
-    await userEvent.type(pw1, "secret1");
-    await userEvent.type(pw2, "secret1");
-    await userEvent.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.type(pw1, "secret1");
+    await user.type(pw2, "secret1");
+    await user.click(screen.getByRole("button", { name: /sign up/i }));
     await waitFor(() => {
       expect(AuthService.register).toHaveBeenCalledWith(
         "alice",
@@ -63,12 +66,12 @@ describe("Register", () => {
   it("shows soft server message in typography for 5xx", async () => {
     AuthService.register.mockRejectedValue(new HttpError("x", { status: 502 }));
     renderRegister();
-    await userEvent.type(screen.getByLabelText(/username/i), "alice");
-    await userEvent.type(screen.getByLabelText(/email/i), "alice@example.com");
+    await user.type(screen.getByLabelText(/username/i), "alice");
+    await user.type(screen.getByLabelText(/email/i), "alice@example.com");
     const [pwa, pwb] = screen.getAllByLabelText(/password/i);
-    await userEvent.type(pwa, "secret1");
-    await userEvent.type(pwb, "secret1");
-    await userEvent.click(screen.getByRole("button", { name: /sign up/i }));
+    await user.type(pwa, "secret1");
+    await user.type(pwb, "secret1");
+    await user.click(screen.getByRole("button", { name: /sign up/i }));
     await waitFor(() => {
       expect(
         screen.getByText(/couldn’t complete sign-up right now/i)
