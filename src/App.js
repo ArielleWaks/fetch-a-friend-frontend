@@ -26,7 +26,6 @@ const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showJobBoard, setJobBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
-  const [showImageBoard, setShowImageBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
   useEffect(() => {
@@ -37,7 +36,6 @@ const App = () => {
       setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
       setJobBoard(user.roles.includes("ROLE_MODERATOR"));
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-      setShowImageBoard(user.roles.includes("ROLE_ADMIN"));
     }
 
     EventBus.on("logout", () => {
@@ -52,7 +50,6 @@ const App = () => {
   const logOut = () => {
     AuthService.logout();
     setShowModeratorBoard(false);
-    setShowImageBoard(false);
     setJobBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);

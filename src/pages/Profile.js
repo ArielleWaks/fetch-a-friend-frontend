@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Button, TextField, Typography, Grid, Card, CardMedia } from '@mui/material';
-import FileService from '../services/FileService';
-import AuthService from "../services/auth.service";
-
+import React from "react";
 
 import {
   MDBBreadcrumb,
@@ -24,60 +20,11 @@ import { useNavigate } from "react-router-dom";
 
 
 const Profile = () => {
-  const currentUser = AuthService.getCurrentUser();
-  const [files, setFiles] = useState(null);
-  const [fileUploaded, setFileUploaded] = useState(null);
-  const [uploaderName, setUploaderName] = useState('');
-  const [description, setDescription] = useState('');
-  const [imageList, setImageList] = useState([]);
-
-  //implementing useNavigate
   const navigate = useNavigate();
   const handleMessageClick = () =>{
     console.log('message clicked')
     navigate('/chatroom');
   }
-
-  // useEffect(() => {
-  //     FileService.getAllImages().then((response) => {
-  //         setImageList(response.data);
-  //     });
-  // }, []);
-
-  // const onFileChange = (event) => {
-  //   setFiles(event.target.files);
-  // };
-  //
-  // const onUploaderNameChange = (event) => {
-  //   setUploaderName(event.target.value);
-  // };
-
-  // const onDescriptionChange = (event) => {
-  //   setDescription(event.target.value);
-  // };
-
-  // const onUpload = (event) => {
-  //   event.preventDefault();
-  //   const formData = new FormData();
-  //
-  //   for (const key of Object.keys(files)) {
-  //     formData.append('files', files[key]);
-  //   }
-  //   formData.append('name', uploaderName);
-  //   formData.append('description', description);
-  //
-  //   FileService.uploadImage(formData)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       setFileUploaded(true);
-  //       FileService.getAllImages().then((response) => {
-  //         setImageList(response.data);
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   return (
     
@@ -109,35 +56,6 @@ const Profile = () => {
                   <MDBBtn onClick={() => handleMessageClick()} outline className="ms-1">Message</MDBBtn>
                 </div>
               </MDBCardBody>
-            </MDBCard>
-            <MDBCard>
-              <Typography variant="h3" gutterBottom>
-                My Pets
-              </Typography>
-              <Grid container spacing={2}>
-                {imageList.map((image) => (
-                  <Grid item key={image.id} xs={12}>
-                    <Card sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                      <CardMedia
-                        component="img"
-                        sx={{width: '100%', height: 200, objectFit: 'cover'}}
-                        image={image.fileUri}
-                        alt={image.uploaderName}
-                      />
-                      <div sx={{padding: 2, textAlign: 'center'}}>
-                        <Typography variant="h5" gutterBottom>
-                          {image.uploaderName}
-                        </Typography>
-                        <Typography variant="body1">
-                          {image.description}
-                        </Typography>
-                      </div>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            
-            
             </MDBCard>
           
           
@@ -193,48 +111,6 @@ const Profile = () => {
             </MDBCard>
 
             <MDBRow>
-              {/*<MDBCol md="6">*/}
-              {/*  <MDBCard className="mb-4 mb-md-0">*/}
-              {/*    <MDBCardBody>*/}
-              {/*      <MDBCardText className="mb-4"><span*/}
-              {/*        className="text-primary font-italic me-1">Upload Image</span></MDBCardText>*/}
-              {/*      <form onSubmit={onUpload}>*/}
-              {/*        <div>*/}
-              {/*          <label>Select a file:</label>*/}
-              {/*          <input type='file' name='file' onChange={onFileChange} multiple/>*/}
-              {/*        </div>*/}
-              {/*        */}
-              {/*        <div className="mt-3">*/}
-              {/*          <label>Pet Name:</label>*/}
-              {/*          <input type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange}/>*/}
-              {/*        </div>*/}
-              {/*        */}
-              {/*        <div className="mt-3">*/}
-              {/*          <label>About your pet:</label>*/}
-              {/*          <TextField*/}
-              {/*            multiline*/}
-              {/*            rows={4}*/}
-              {/*            */}
-              {/*            fullWidth*/}
-              {/*            value={description}*/}
-              {/*            onChange={onDescriptionChange}*/}
-              {/*            InputProps={{*/}
-              {/*              sx: {*/}
-              {/*                '& fieldset': {*/}
-              {/*                  borderColor: 'rgba(0, 0, 0, .8)',*/}
-              {/*                },*/}
-              {/*              },*/}
-              {/*            }}*/}
-              {/*          />*/}
-              {/*        </div>*/}
-              {/*        <br/>*/}
-              {/*        <Button type='submit' variant="contained" color="primary" disabled={!files || !uploaderName}>*/}
-              {/*          Upload*/}
-              {/*        </Button>*/}
-              {/*      </form>*/}
-              {/*    </MDBCardBody>*/}
-              {/*  </MDBCard>*/}
-              {/*</MDBCol>*/}
               
               <MDBCol md="6">
                 <MDBCard className="mb-4 mb-md-0">
@@ -280,6 +156,5 @@ const Profile = () => {
 
 
 export default Profile;
-
 
 
