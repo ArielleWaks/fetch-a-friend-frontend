@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography } from '@mui/material';
 import JobCard from "../components/JobCard";
-import EventBus from "../common/EventBus";
 import { Link } from "react-router-dom";
 
-const API_URL = "/api";
+import { paths } from "@/api/paths";
 
 export default function BookmarkedJobs() {
   const [jobArray, setJobArray] = useState([]);
@@ -16,7 +15,7 @@ export default function BookmarkedJobs() {
     async function fetchData() {
       try {
         if (user) {
-          const response = await fetch(API_URL + '/jobs/myBookmarkedJobs', {
+          const response = await fetch(paths.jobs.myBookmarks, {
             headers: {
               'Authorization': 'Bearer ' + user.accessToken,
               'Content-Type': 'application/json'
@@ -27,11 +26,7 @@ export default function BookmarkedJobs() {
           console.log(json);
         }
       } catch (error) {
-        const errorMessage = error.message || error.toString();
-        console.error(errorMessage);
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
+        console.error(error?.message || String(error));
       }
     }
     fetchData();

@@ -1,4 +1,5 @@
 import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -6,19 +7,22 @@ import Login from "./Login";
 import AuthService from "../services/auth.service";
 import { HttpError } from "../services/http";
 
-jest.mock("../services/auth.service", () => ({
+vi.mock("../services/auth.service", () => ({
   __esModule: true,
   default: {
-    login: jest.fn(),
+    login: vi.fn(),
   },
 }));
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("Login", () => {
   let user;

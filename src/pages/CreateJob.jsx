@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, TextField, Container, Grid, MenuItem } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  TextField,
+  Container,
+  Grid,
+  MenuItem,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import dayjs from "dayjs";
+import { paths } from "@/api/paths";
 
-const API_URL = "/api";
-
-export default function UpdateJob() {
+export default function CreateJob() {
   const [content, setContent] = useState('');
   const [formData, setFormData] = useState({
     startDate: dayjs(),
@@ -45,54 +50,21 @@ export default function UpdateJob() {
   });
   
   const noErrors = () => Object.values(errors).every((value) => (!value));
-  const { id } = useParams()
   
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user === null) {
-      navigate('/login');
+      navigate('/login')
     }
-    
-    async function fetchData() {
-      try {
-        const response = await fetch(API_URL + '/jobs/' + id, {
-          headers: {
-            'Authorization': 'Bearer ' + user.accessToken,
-            'Content-Type': 'application/json'
-          }
-        });
-        if (response.status === 401) {
-          localStorage.removeItem("user");
-          navigate('/login');
-        }
-        const json = await response.json()
-        setFormData({
-          startDate: dayjs(json.startDate),
-          endDate: dayjs(json.endDate),
-          zipCode: json.zipCode,
-          payRate: json.payRate,
-          totalHours: json.totalHours,
-          description: json.description,
-          petName: json.petName,
-          petType: json.petType,
-          petNumber: json.petNumber,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    
-    fetchData();
-  }, [id, navigate]);
-  
+  });
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (noErrors) {
       const user = JSON.parse(localStorage.getItem('user'));
       try {
-        const response = await fetch(API_URL + '/jobs/' + id, {
-          method: 'PUT',
+        const response = await fetch(paths.jobs.add, {
+          method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + user.accessToken,
             'Content-Type': 'application/json'
@@ -103,9 +75,9 @@ export default function UpdateJob() {
           localStorage.removeItem("user");
           navigate('/login');
         }
-        navigate('/jobs/myjobs');
+        navigate('/jobs/myjobs')
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     } else {
       setContent(JSON.stringify(errors));
@@ -138,7 +110,7 @@ export default function UpdateJob() {
     <div className="container">
       <Container maxWidth="md">
         <header className="jumbotron">
-          <h3>Edit Job Posting</h3>
+          <h3>Create Job Posting</h3>
         </header>
       </Container>
       <Container maxWidth="md">
@@ -192,7 +164,6 @@ export default function UpdateJob() {
                     totalHoursError: isNaN(Number(hours)) || hours <= 0
                   });
                   setFormData({...formData, totalHours: hours});
-                  // setEmptyFields(false);
                 }}
                 required
               />
@@ -264,7 +235,7 @@ export default function UpdateJob() {
                   <em>None</em>
                 </MenuItem>
                 {Object.keys(petTypes).sort().map((key)=>
-                  <MenuItem key={key} value={petTypes[key]}>{key}</MenuItem>
+                <MenuItem key={key} value={petTypes[key]}>{key}</MenuItem>
                 )}
               </TextField>
             </Grid>
@@ -290,7 +261,7 @@ export default function UpdateJob() {
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary" disabled={!noErrors()}>
-                UPDATE
+                Submit
               </Button>
             </Grid>
           </Grid>

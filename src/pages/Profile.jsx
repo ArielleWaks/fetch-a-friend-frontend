@@ -14,16 +14,10 @@ import {
 } from "@mui/material";
 import AuthService from "../services/auth.service";
 import BadgeCard from "../components/BadgeCard";
-import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const currentUser = AuthService.getCurrentUser();
   const [imageList] = useState([]);
-  const navigate = useNavigate();
-
-  const handleMessageClick = () => {
-    navigate("/chatroom");
-  };
 
   const displayName = currentUser?.username ?? "User";
   const displayEmail = currentUser?.email ?? "—";
@@ -52,9 +46,6 @@ const Profile = () => {
                 </Typography>
                 <Stack direction="row" spacing={1} justifyContent="center">
                   <Button variant="contained">Follow</Button>
-                  <Button variant="outlined" onClick={handleMessageClick}>
-                    Message
-                  </Button>
                 </Stack>
               </CardContent>
             </Card>

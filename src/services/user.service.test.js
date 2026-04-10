@@ -1,13 +1,18 @@
-import { getJson } from "./http";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { paths } from "@/api/paths";
 import UserService from "./user.service";
 
-jest.mock("./http", () => ({
-  getJson: jest.fn(),
+vi.mock("@/api/client", () => ({
+  default: {
+    get: vi.fn(),
+  },
 }));
+
+import api from "@/api/client";
 
 describe("UserService", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     localStorage.clear();
     localStorage.setItem(
       "user",
@@ -15,21 +20,21 @@ describe("UserService", () => {
     );
   });
 
-  it("getPublicContent calls getJson with auth header", async () => {
-    getJson.mockResolvedValue({ roles: ["ROLE_USER"] });
+  it("getPublicContent calls api.get with auth header", async () => {
+    api.get.mockResolvedValue({ data: { roles: ["ROLE_USER"] } });
     await expect(UserService.getPublicContent()).resolves.toEqual({
       roles: ["ROLE_USER"],
     });
-    expect(getJson).toHaveBeenCalledWith("/api/user/all", {
-      Authorization: "Bearer tok",
+    expect(api.get).toHaveBeenCalledWith(paths.user.all, {
+      headers: { Authorization: "Bearer tok" },
     });
   });
 
   it("getImageContent calls file upload path with auth header", async () => {
-    getJson.mockResolvedValue([]);
+    api.get.mockResolvedValue({ data: [] });
     await expect(UserService.getImageContent()).resolves.toEqual([]);
-    expect(getJson).toHaveBeenCalledWith("/file/upload", {
-      Authorization: "Bearer tok",
+    expect(api.get).toHaveBeenCalledWith("/file/upload", {
+      headers: { Authorization: "Bearer tok" },
     });
   });
 });

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HttpError, request, getJson, postJson } from "./http";
 
 function mockResponse(overrides) {
@@ -23,7 +24,7 @@ describe("HttpError", () => {
 
 describe("request", () => {
   beforeEach(() => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   it("returns parsed JSON on success", async () => {
@@ -76,7 +77,7 @@ describe("request", () => {
 
 describe("getJson and postJson", () => {
   beforeEach(() => {
-    global.fetch = jest.fn().mockResolvedValue(
+    global.fetch = vi.fn().mockResolvedValue(
       mockResponse({ text: async () => "null" })
     );
   });

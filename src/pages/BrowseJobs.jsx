@@ -15,10 +15,8 @@ import {
   TextField,
   Stack,
 } from '@mui/material';
-import JobCard from "../components/JobCard";
-import EventBus from "../common/EventBus";
-
-const API_URL = "/api";
+import JobCard from "@/components/JobCard";
+import { paths } from "@/api/paths";
 
 export default function BrowseJobs () {
   const [jobArray, setJobArray] = useState([]);
@@ -47,7 +45,7 @@ export default function BrowseJobs () {
     setUser(user);
     async function fetchData() {
       try {
-        const response = await fetch(API_URL + '/jobs/open', {
+        const response = await fetch(paths.jobs.open, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -55,16 +53,7 @@ export default function BrowseJobs () {
         const json = await response.json()
         setJobArray(json);
       } catch (error) {
-        const errorMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        console.log(errorMessage);
-        if (error.response && error.response.status === 401) {
-          EventBus.dispatch("logout");
-        }
+        console.log(error?.message || String(error));
       }
     }
     fetchData();

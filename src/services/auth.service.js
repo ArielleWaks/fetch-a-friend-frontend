@@ -1,24 +1,22 @@
-import { postJson } from "./http";
-
-const API_URL = "/api/auth/";
+import api from "@/api/client";
+import { paths } from "@/api/paths";
 
 const register = (username, email, password) => {
-  return postJson(API_URL + "signup", {
-    username,
-    email,
-    password,
-  }).then((data) => ({ data }));
+  return api
+    .post(paths.auth.signup, {
+      username,
+      email,
+      password,
+    })
+    .then((response) => ({ data: response.data }));
 };
 
 const login = (username, password) => {
-  return postJson(API_URL + "signin", {
-    username,
-    password,
-  }).then((data) => {
+  return api.post(paths.auth.signin, { username, password }).then((response) => {
+    const data = response.data;
     if (data && data.accessToken) {
       localStorage.setItem("user", JSON.stringify(data));
     }
-
     return data;
   });
 };

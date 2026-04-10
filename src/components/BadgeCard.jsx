@@ -1,4 +1,4 @@
-import { React, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import animalAvatarSelector from "./functions/animalAvatarSelector";
 
-const API_URL = "/api";
+import { paths } from "@/api/paths";
 
 export default function BadgeCard () {
   const [badgeArray, setBadgeArray] = useState([]);
@@ -38,7 +38,7 @@ export default function BadgeCard () {
 
     async function fetchData(){
       try {
-        const response = await fetch(API_URL + '/badges/mybadges', {
+        const response = await fetch(paths.badges.my, {
           headers: {
             'Authorization': 'Bearer ' + user.accessToken,
             'Content-Type': 'application/json'

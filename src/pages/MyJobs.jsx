@@ -4,7 +4,7 @@ import JobCard from "../components/JobCard";
 
 import {Link, useNavigate} from "react-router-dom";
 
-const API_URL = "/api";
+import { paths } from "@/api/paths";
 
 export default function MyJobs () {
   const [jobArray, setJobArray] = useState(null);
@@ -18,7 +18,7 @@ export default function MyJobs () {
     async function fetchData() {
       const user = JSON.parse(localStorage.getItem('user'));
       try {
-        const response = await fetch(API_URL + '/jobs/myjobs', {
+        const response = await fetch(paths.jobs.myJobs, {
           headers: {
             'Authorization': 'Bearer ' + user.accessToken,
             'Content-Type': 'application/json'

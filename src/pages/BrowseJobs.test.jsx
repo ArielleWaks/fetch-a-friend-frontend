@@ -1,19 +1,19 @@
 import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import BrowseJobs from "./BrowseJobs";
 
-jest.mock("../components/JobCard", () => {
-  function MockJobCard({ jobObject }) {
+vi.mock("@/components/JobCard", () => ({
+  default: function MockJobCard({ jobObject }) {
     return <div data-testid="job-card">{jobObject.id}</div>;
-  }
-  return MockJobCard;
-});
+  },
+}));
 
 describe("BrowseJobs", () => {
   beforeEach(() => {
     localStorage.clear();
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: () =>
         Promise.resolve([

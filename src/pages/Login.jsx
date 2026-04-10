@@ -11,7 +11,18 @@ import Link from "@mui/material/Link";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import AuthService from "../services/auth.service";
+import { HttpError } from "../services/http";
 import { getAuthFeedback } from "../utils/authFeedback";
+
+function toHttpError(error) {
+  if (error?.response) {
+    return new HttpError(
+      error.response.data?.message || error.message || "Request failed",
+      { status: error.response.status, data: error.response.data }
+    );
+  }
+  return error;
+}
 
 function loginUsernameError(username) {
   if (!username.trim()) return "This field is required!";
@@ -50,11 +61,15 @@ const Login = () => {
     AuthService.login(username, password).then(
       () => {
         navigate("/profile");
-        window.location.reload();
+        if (!import.meta.env.VITEST) {
+          window.location.reload();
+        }
       },
       (error) => {
         setLoading(false);
-        setRemoteError(getAuthFeedback(error, { action: "sign you in" }));
+        setRemoteError(
+          getAuthFeedback(toHttpError(error), { action: "sign you in" })
+        );
       }
     );
   };

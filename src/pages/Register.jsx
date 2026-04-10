@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { isEmail } from "validator";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,6 +12,7 @@ import Link from "@mui/material/Link";
 
 import AuthService from "../services/auth.service";
 import { getAuthFeedback } from "../utils/authFeedback";
+import { HttpError } from "../services/http";
 
 function usernameError(username) {
   if (!username.trim()) return "This field is required!";
@@ -48,7 +49,18 @@ const initialTouched = {
   passwordConfirm: false,
 };
 
+function toHttpError(error) {
+  if (error?.response) {
+    return new HttpError(
+      error.response.data?.message || error.message || "Request failed",
+      { status: error.response.status, data: error.response.data }
+    );
+  }
+  return error;
+}
+
 const Register = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,6 +70,7 @@ const Register = () => {
   const [serverErrorSoft, setServerErrorSoft] = useState(false);
   const [touched, setTouched] = useState(initialTouched);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const uErr = usernameError(username);
   const eErr = emailError(email);
@@ -79,14 +92,38 @@ const Register = () => {
     setSubmitAttempted(true);
     if (!formValid) return;
 
+    setLoading(true);
     AuthService.register(username, email, password).then(
       (response) => {
-        setMessage(response.data.message);
-        setServerErrorSoft(false);
-        setSuccessful(true);
+        AuthService.login(username, password).then(
+          () => {
+            setLoading(false);
+            navigate("/profile");
+            if (!import.meta.env.VITEST) {
+              window.location.reload();
+            }
+          },
+          (loginError) => {
+            setLoading(false);
+            const loginMsg =
+              (loginError.response &&
+                loginError.response.data &&
+                loginError.response.data.message) ||
+              loginError.message ||
+              loginError.toString();
+            setMessage(
+              `${response.data.message} Automatic sign-in failed: ${loginMsg} Please sign in manually.`
+            );
+            setSuccessful(true);
+            setServerErrorSoft(false);
+          }
+        );
       },
       (error) => {
-        const fb = getAuthFeedback(error, { action: "complete sign-up" });
+        setLoading(false);
+        const fb = getAuthFeedback(toHttpError(error), {
+          action: "complete sign-up",
+        });
         setMessage(fb.text);
         setServerErrorSoft(fb.soft);
         setSuccessful(false);
@@ -130,7 +167,7 @@ const Register = () => {
                 autoComplete="username"
                 autoFocus
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(ev) => setUsername(ev.target.value)}
                 onBlur={() =>
                   setTouched((t) => ({
                     ...t,
@@ -149,7 +186,7 @@ const Register = () => {
                 name="email"
                 autoComplete="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(ev) => setEmail(ev.target.value)}
                 onBlur={() =>
                   setTouched((t) => ({
                     ...t,
@@ -169,12 +206,14 @@ const Register = () => {
                 id="password"
                 autoComplete="new-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(ev) => setPassword(ev.target.value)}
                 onBlur={() =>
                   setTouched((t) => ({
                     ...t,
                     password: true,
-                    ...(passwordConfirm.trim() !== "" ? { passwordConfirm: true } : {}),
+                    ...(passwordConfirm.trim() !== ""
+                      ? { passwordConfirm: true }
+                      : {}),
                   }))
                 }
                 error={showP && Boolean(pErr)}
@@ -189,7 +228,7 @@ const Register = () => {
                 type="password"
                 id="passwordConfirm"
                 value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
+                onChange={(ev) => setPasswordConfirm(ev.target.value)}
                 onBlur={() =>
                   setTouched((t) => ({
                     ...t,
@@ -199,7 +238,13 @@ const Register = () => {
                 error={showPc && Boolean(pcErr)}
                 helperText={showPc ? pcErr : ""}
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={loading}
+                sx={{ mt: 3, mb: 2 }}
+              >
                 Sign Up
               </Button>
             </>

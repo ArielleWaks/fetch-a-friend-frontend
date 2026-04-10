@@ -6,11 +6,9 @@ import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import animalAvatarSelector from "./functions/animalAvatarSelector";
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import bookmarkUpdate from "./functions/bookmarkUpdate";
-
+import { paths } from "@/api/paths";
 
 export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled, editEnabled, acceptEnabled, bookmarkEnabled }) {
-
-  const API_URL = "/api";
 
   //Checks to see if a user has a job bookmarked or not.
   const user = JSON.parse(localStorage.getItem('user'));
@@ -25,7 +23,7 @@ export default function JobCard ({ jobObject, id, deleteCallback, deleteEnabled,
 
 //Bookmarks or un-bookmarks a job, then swaps the bookmarking icon.
 const handleBookmarkClick = () => {
-  bookmarkUpdate(jobObject, API_URL, navigate);
+  bookmarkUpdate(jobObject, navigate);
   setIsBookmarked(!isBookmarked);
 };
   
@@ -33,7 +31,7 @@ const handleBookmarkClick = () => {
   const handleAcceptJob = async (id, _e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-      const response = await fetch(API_URL + '/jobs/sitter/' + id, {
+      const response = await fetch(paths.jobs.sitter(id), {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + user.accessToken,
@@ -52,7 +50,7 @@ const handleBookmarkClick = () => {
   
   const handleDelete = (id, _e) => {
     try {
-      const response = fetch(API_URL + '/jobs/' + id, {
+      const response = fetch(paths.jobs.byId(id), {
         method: 'DELETE',
         headers: {
           'Authorization': 'Bearer ' + user.accessToken,

@@ -1,14 +1,17 @@
-import { getJson } from "./http";
+import api from "@/api/client";
+import { paths } from "@/api/paths";
 import authHeader from "./auth-header";
 
-const API_URL = "/api/user/";
-
 const getPublicContent = () => {
-  return getJson(API_URL + "all", authHeader());
+  return api
+    .get(paths.user.all, { headers: authHeader() })
+    .then((response) => response.data);
 };
 
 const getImageContent = () => {
-  return getJson("/file/upload", authHeader());
+  return api
+    .get("/file/upload", { headers: authHeader() })
+    .then((response) => response.data);
 };
 
 const UserService = {

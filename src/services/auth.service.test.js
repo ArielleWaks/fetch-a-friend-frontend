@@ -1,20 +1,25 @@
-import { postJson } from "./http";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { paths } from "@/api/paths";
 import AuthService from "./auth.service";
 
-jest.mock("./http", () => ({
-  postJson: jest.fn(),
+vi.mock("@/api/client", () => ({
+  default: {
+    post: vi.fn(),
+  },
 }));
+
+import api from "@/api/client";
 
 describe("AuthService", () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("register posts signup payload and wraps response", async () => {
-    postJson.mockResolvedValue({ message: "Registered" });
+    api.post.mockResolvedValue({ data: { message: "Registered" } });
     const out = await AuthService.register("u1", "u1@x.com", "pw123456");
-    expect(postJson).toHaveBeenCalledWith("/api/auth/signup", {
+    expect(api.post).toHaveBeenCalledWith(paths.auth.signup, {
       username: "u1",
       email: "u1@x.com",
       password: "pw123456",
@@ -24,9 +29,9 @@ describe("AuthService", () => {
 
   it("login posts signin and persists user when accessToken present", async () => {
     const payload = { accessToken: "tok", username: "u1" };
-    postJson.mockResolvedValue(payload);
+    api.post.mockResolvedValue({ data: payload });
     const data = await AuthService.login("u1", "secret12");
-    expect(postJson).toHaveBeenCalledWith("/api/auth/signin", {
+    expect(api.post).toHaveBeenCalledWith(paths.auth.signin, {
       username: "u1",
       password: "secret12",
     });
@@ -35,7 +40,7 @@ describe("AuthService", () => {
   });
 
   it("login does not write localStorage without accessToken", async () => {
-    postJson.mockResolvedValue({ username: "u1" });
+    api.post.mockResolvedValue({ data: { username: "u1" } });
     await AuthService.login("u1", "p");
     expect(localStorage.getItem("user")).toBeNull();
   });
