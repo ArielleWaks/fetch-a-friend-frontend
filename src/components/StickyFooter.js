@@ -27,12 +27,8 @@ export default function StickyFooter() {
     <ThemeProvider theme={defaultTheme}>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
           marginTop: 'auto',
           width: '100%',
-          position: 'relative',
-          bottom: '0',
         }}
       >
         <CssBaseline />
