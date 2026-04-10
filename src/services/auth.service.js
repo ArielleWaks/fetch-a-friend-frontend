@@ -1,28 +1,26 @@
-import axios from "axios";
+import { postJson } from "./http";
 
 const API_URL = "/api/auth/";
 
 const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
+  return postJson(API_URL + "signup", {
     username,
     email,
     password,
-  });
+  }).then((data) => ({ data }));
 };
 
 const login = (username, password) => {
-  return axios
-    .post(API_URL + "signin", {
-      username,
-      password,
-    })
-    .then((response) => {
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
+  return postJson(API_URL + "signin", {
+    username,
+    password,
+  }).then((data) => {
+    if (data && data.accessToken) {
+      localStorage.setItem("user", JSON.stringify(data));
+    }
 
-      return response.data;
-    });
+    return data;
+  });
 };
 
 const logout = () => {
@@ -40,4 +38,4 @@ const AuthService = {
   getCurrentUser,
 };
 
-export default AuthService; 
+export default AuthService;

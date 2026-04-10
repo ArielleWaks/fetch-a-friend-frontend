@@ -43,7 +43,7 @@ export default function NavBar({ currentUser, logOut }) {
                 <Link to={"/register"} className="nav-link" style={{ textDecoration: 'none', color: 'inherit' }} >
                   Register
                 </Link>
-              < /Button >
+              </Button>
             </>
           )
           }

@@ -89,4 +89,4 @@ npm test
 
 - **Backend (API, security, WebSocket, persistence):** [fetch-a-friend-backend](https://github.com/ArielleWaks/fetch-a-friend-backend) — or locally: `../fetch-a-friend-backend` when both repos share a parent folder.
 
-For API paths, Postman, and security rules, see that repo’s README and `postman/fancyrats.postman_collection.json`.
+For API paths, Postman, and security rules, see that repo’s README and `postman/fetch-a-friend.postman_collection.json`.

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
@@ -23,9 +23,6 @@ import NavBar from "./components/NavBar"
 import Container from '@mui/material/Container';
 
 const App = () => {
-  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
-  const [showJobBoard, setJobBoard] = useState(false);
-  const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
   useEffect(() => {
@@ -33,9 +30,6 @@ const App = () => {
 
     if (user) {
       setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
-      setJobBoard(user.roles.includes("ROLE_MODERATOR"));
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
     }
 
     EventBus.on("logout", () => {
@@ -49,9 +43,6 @@ const App = () => {
 
   const logOut = () => {
     AuthService.logout();
-    setShowModeratorBoard(false);
-    setJobBoard(false);
-    setShowAdminBoard(false);
     setCurrentUser(undefined);
   };
 
